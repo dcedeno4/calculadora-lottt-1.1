@@ -403,3 +403,8 @@ ipcMain.handle("export:pdfReciboDesdeHTML", async (e, html, outPath) => {
 
   return { ok: true, outPath };
 });
+
+// Manejador para cerrar la aplicación
+ipcMain.handle("app:quit", async () => {
+  app.quit();
+});
