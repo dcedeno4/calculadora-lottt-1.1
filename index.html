@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <meta name="theme-color" content="#2c3e50"/>
-  <meta name="description" content="Calculadora de Beneficios y Prestaciones LOTTT - Multiempresa v1.1. Cálculo de vacaciones, utilidades, prestaciones e intereses."/>
+  <meta name="description" content="Calculadora de Beneficios y Prestaciones LOTTT - Multiempresa v1.1. CÃ¡lculo de vacaciones, utilidades, prestaciones e intereses."/>
   <meta name="apple-mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
   <meta name="apple-mobile-web-app-title" content="LOTTT Calc"/>
@@ -169,50 +169,50 @@
           <div id="loginMessage" class="msg"></div>
         </div>
 
-        <div class="foot">Derechos reservados y prohibida su comercialización por rastreo en línea.</div>
+        <div class="foot">Derechos reservados y prohibida su comercializaciÃ³n por rastreo en lÃ­nea.</div>
       </div>
     </div>
   </div>
 
   <div id="vacModal" class="modal">
     <div class="boxm">
-      <h3><i class="fa-solid fa-calendar-check"></i> Vacaciones y Bono: ¿qué deseas pagar?</h3>
+      <h3><i class="fa-solid fa-calendar-check"></i> Vacaciones y Bono: Â¿quÃ© deseas pagar?</h3>
       <div class="sub">
-        Selecciona cómo calcular los días DV/DBV (aniversario). Puedes volver atrás y cambiar fechas.
+        Selecciona cÃ³mo calcular los dÃ­as DV/DBV (aniversario). Puedes volver atrÃ¡s y cambiar fechas.
       </div>
 
       <div class="grid2">
         <div>
-          <label>Modo de cálculo</label>
+          <label>Modo de cÃ¡lculo</label>
           <select id="vac_mode">
-            <option value="AUTO">Automático (por defecto)</option>
-            <option value="LAST_FRACTION">Solo último período (fracción desde el último aniversario)</option>
-            <option value="SELECT_PERIODS">Seleccionar períodos (años completos) y sumar</option>
+            <option value="AUTO">AutomÃ¡tico (por defecto)</option>
+            <option value="LAST_FRACTION">Solo Ãºltimo perÃ­odo (fracciÃ³n desde el Ãºltimo aniversario)</option>
+            <option value="SELECT_PERIODS">Seleccionar perÃ­odos (aÃ±os completos) y sumar</option>
           </select>
           <div class="hint">
-            Ej: 1 año y 3 meses ⇒ Año 2 (16 días) /12 * 3.
+            Ej: 1 aÃ±o y 3 meses â‡’ AÃ±o 2 (16 dÃ­as) /12 * 3.
           </div>
         </div>
 
         <div>
           <label>
             <input type="checkbox" id="vac_include_fraction" />
-            Incluir fracción del período actual (si hay meses) en “Seleccionar períodos”
+            Incluir fracciÃ³n del perÃ­odo actual (si hay meses) en â€œSeleccionar perÃ­odosâ€
           </label>
-          <div class="hint">Si marcas años completos y además quieres sumar meses del año en curso.</div>
+          <div class="hint">Si marcas aÃ±os completos y ademÃ¡s quieres sumar meses del aÃ±o en curso.</div>
         </div>
       </div>
 
       <div id="vac_periods_wrap" style="margin-top:12px; display:none;">
-        <label>Períodos disponibles (años completos causados)</label>
+        <label>PerÃ­odos disponibles (aÃ±os completos causados)</label>
         <div id="vac_periods_list" class="checks" style="margin-top:8px"></div>
         <div class="hint">
-          Marca los años completos que quieres pagar (Año 1, Año 2, etc.). Si nunca se pagaron, marca todos.
+          Marca los aÃ±os completos que quieres pagar (AÃ±o 1, AÃ±o 2, etc.). Si nunca se pagaron, marca todos.
         </div>
       </div>
 
       <div class="btnrow">
-        <button class="btn gray" id="vac_back_btn" type="button"><i class="fa-solid fa-arrow-left"></i> ATRÁS</button>
+        <button class="btn gray" id="vac_back_btn" type="button"><i class="fa-solid fa-arrow-left"></i> ATRÃS</button>
         <button class="btn primary" id="vac_apply_btn" type="button"><i class="fa-solid fa-check"></i> APLICAR</button>
       </div>
     </div>
@@ -221,9 +221,9 @@
   <div id="appContainer" class="wrap" style="display:none;">
     <div class="header no-print">
       <h1><i class="fa-solid fa-scale-balanced"></i> CALCULADORA DE BENEFICIOS Y PRESTACIONES - LOTTT</h1>
-      <p>Cálculo de vacaciones, bono, utilidades, prestaciones e intereses (Venezuela).</p>
-      <p style="margin-top:5px;"><strong><i class="fa-solid fa-building"></i> MULTIEMPRESA - Versión 1.1 © 2026</strong></p>
-      <small>Derechos reservados y prohibida su comercialización por rastreo en línea.</small>
+      <p>CÃ¡lculo de vacaciones, bono, utilidades, prestaciones e intereses (Venezuela).</p>
+      <p style="margin-top:5px;"><strong><i class="fa-solid fa-building"></i> MULTIEMPRESA - VersiÃ³n 1.1 Â© 2026</strong></p>
+      <small>Derechos reservados y prohibida su comercializaciÃ³n por rastreo en lÃ­nea.</small>
       <div class="btnrow" style="justify-content:flex-end;margin-top:10px">
         <button class="btn danger" id="btnSalir" type="button"><i class="fa-solid fa-right-from-bracket"></i> SALIR</button>
       </div>
@@ -242,7 +242,7 @@
         </div>
         <div>
           <label>Nota</label>
-          <div class="hint">La moneda solo cambia el símbolo/etiqueta (no convierte automáticamente tasas de cambio).</div>
+          <div class="hint">La moneda solo cambia el sÃ­mbolo/etiqueta (no convierte automÃ¡ticamente tasas de cambio).</div>
         </div>
       </div>
     </div>
@@ -269,7 +269,7 @@
               <button class="btn gray" id="btnExportReciboPdf" type="button"><i class="fa-solid fa-file-pdf"></i> EXPORTAR RECIBO PDF</button>
               <button class="btn gray" id="btnExportExcelCalculo" type="button"><i class="fa-solid fa-file-excel"></i> EXPORTAR EXCEL</button>
             </div>
-            <div class="hint">Para exportar Excel debes abrir un cálculo desde el historial (Ver/Rehacer).</div>
+            <div class="hint">Para exportar Excel debes abrir un cÃ¡lculo desde el historial (Ver/Rehacer).</div>
           </div>
         </div>
 
@@ -281,7 +281,7 @@
               <th style="text-align:left">ID</th>
               <th style="text-align:left">Registro</th>
               <th style="text-align:left">Ingreso</th>
-              <th style="text-align:left">Cálculo</th>
+              <th style="text-align:left">CÃ¡lculo</th>
               <th style="text-align:left">Moneda</th>
               <th>Total</th>
               <th style="text-align:center">Acciones</th>
@@ -310,12 +310,12 @@
           <thead>
             <tr>
               <th style="text-align:left">Documento</th>
-              <th style="text-align:left">Nombre / Razón Social</th>
+              <th style="text-align:left">Nombre / RazÃ³n Social</th>
               <th style="text-align:center">Acciones</th>
             </tr>
           </thead>
           <tbody id="tbodyEmpresas"></tbody>
-        </table>
+        </table>`n        `n        <div class="btnrow" style="margin-top:15px">`n          <button class="btn primary" id="btnNuevaEmpresa" type="button">`n            <i class="fa-solid fa-building-circle-arrow-right"></i> AGREGAR NUEVA EMPRESA`n          </button>`n        </div>
         
         <div class="hint" style="margin-top:10px">
           <strong>Empresa seleccionada:</strong> <span id="empresaSeleccionadaNombre">Ninguna</span>
@@ -367,7 +367,7 @@
           <input id="nuevo_trabajador_nombre" class="to-upper" type="text"/>
         </div>
         <div>
-          <label>Cédula / RIF del Trabajador</label>
+          <label>CÃ©dula / RIF del Trabajador</label>
           <div class="row">
             <select id="nuevo_trabajador_tipo_doc" style="max-width:92px">
               <option value="V">V</option><option value="E">E</option><option value="J">J</option>
@@ -404,13 +404,13 @@
       
       <div class="hint" style="margin-top:10px">
         <strong>Opciones:</strong><br>
-        • <strong>GUARDAR TRABAJADOR:</strong> Guarda el trabajador en la base de datos y vuelve a la lista.<br>
-        • <strong>GUARDAR Y CALCULAR:</strong> Guarda el trabajador y continúa directamente al cálculo.
+        â€¢ <strong>GUARDAR TRABAJADOR:</strong> Guarda el trabajador en la base de datos y vuelve a la lista.<br>
+        â€¢ <strong>GUARDAR Y CALCULAR:</strong> Guarda el trabajador y continÃºa directamente al cÃ¡lculo.
       </div>
       
       <div class="btnrow" style="margin-top:10px">
         <button class="btn success" id="btnGuardarYCalcular" type="button">
-          <i class="fa-solid fa-calculator"></i> GUARDAR Y CONTINUAR AL CÁLCULO
+          <i class="fa-solid fa-calculator"></i> GUARDAR Y CONTINUAR AL CÃLCULO
         </button>
       </div>
     </div>
@@ -447,7 +447,7 @@
           <input id="trabajador_nombre_display" class="to-upper" type="text" readonly style="background:#f5f5f5"/>
         </div>
         <div>
-          <label>Cédula / Cargo</label>
+          <label>CÃ©dula / Cargo</label>
           <input id="trabajador_info_display" class="to-upper" type="text" readonly style="background:#f5f5f5"/>
         </div>
       </div>
@@ -459,9 +459,9 @@
       </div>
     </div>
 
-    <!-- Formulario de cálculo -->
+    <!-- Formulario de cÃ¡lculo -->
     <div class="card no-print" id="cardFormularioCalculo" style="display:none">
-      <h2><i class="fa-solid fa-calendar-days"></i> Fechas del Cálculo</h2>
+      <h2><i class="fa-solid fa-calendar-days"></i> Fechas del CÃ¡lculo</h2>
 
       <div class="grid3">
         <div>
@@ -470,14 +470,14 @@
           <div class="hint">Fecha real de ingreso del trabajador.</div>
         </div>
         <div>
-          <label>Fecha desde (inicio del cálculo)</label>
+          <label>Fecha desde (inicio del cÃ¡lculo)</label>
           <input id="fecha_desde" type="date"/>
-          <div class="hint">Fecha desde la cual se hará el cálculo.</div>
+          <div class="hint">Fecha desde la cual se harÃ¡ el cÃ¡lculo.</div>
         </div>
         <div>
-          <label>Fecha hasta (corte del cálculo)</label>
+          <label>Fecha hasta (corte del cÃ¡lculo)</label>
           <input id="fecha_calculo" type="date"/>
-          <div class="hint">Fecha hasta la cual se hará el cálculo.</div>
+          <div class="hint">Fecha hasta la cual se harÃ¡ el cÃ¡lculo.</div>
         </div>
       </div>
 
@@ -493,7 +493,7 @@
     </div>
 
     <div class="card no-print">
-      <h2><i class="fa-solid fa-money-check-dollar"></i> Datos salariales y parámetros</h2>
+      <h2><i class="fa-solid fa-money-check-dollar"></i> Datos salariales y parÃ¡metros</h2>
 
       <div class="grid3">
         <div>
@@ -502,30 +502,30 @@
           <div class="hint">Base fija mensual.</div>
         </div>
         <div>
-          <label>Días de utilidades anuales (DUA)</label>
+          <label>DÃ­as de utilidades anuales (DUA)</label>
           <input id="DUA" type="number" min="30" step="1" value="30"/>
-          <div class="hint">Mínimo legal 30 días (modificable).</div>
+          <div class="hint">MÃ­nimo legal 30 dÃ­as (modificable).</div>
         </div>
         <div>
-          <label>Último salario diario integral (SDI_FINAL)</label>
+          <label>Ãšltimo salario diario integral (SDI_FINAL)</label>
           <input id="SDI_FINAL" type="number" min="0" step="0.01" value="0"/>
-          <div class="hint">Se trae del SDI automáticamente (si está en 0). Puede ajustarse.</div>
+          <div class="hint">Se trae del SDI automÃ¡ticamente (si estÃ¡ en 0). Puede ajustarse.</div>
         </div>
       </div>
 
       <div class="grid3" style="margin-top:10px">
         <div>
-          <label>Días adicionales por antigüedad (DAA)</label>
+          <label>DÃ­as adicionales por antigÃ¼edad (DAA)</label>
           <input id="DAA" type="number" value="0" readonly />
-          <div class="hint">Vacaciones/Bono: 1 día por año desde el 2do (tope 15).</div>
+          <div class="hint">Vacaciones/Bono: 1 dÃ­a por aÃ±o desde el 2do (tope 15).</div>
         </div>
         <div>
-          <label>Días de vacaciones a pagar (DV)</label>
+          <label>DÃ­as de vacaciones a pagar (DV)</label>
           <input id="DV" type="number" step="0.01" value=""/>
           <div class="hint">Se define desde la ventana emergente (editable por patrono).</div>
         </div>
         <div>
-          <label>Días de bono vacacional a pagar (DBV)</label>
+          <label>DÃ­as de bono vacacional a pagar (DBV)</label>
           <input id="DBV" type="number" step="0.01" value=""/>
           <div class="hint">Se define desde la ventana emergente (editable por patrono).</div>
         </div>
@@ -541,8 +541,8 @@
       <h2><i class="fa-solid fa-coins"></i> Salario base y diario</h2>
       <div class="results">
         <div class="box"><div class="k">Salario diario normal (SDN)</div><div id="r_SDN" class="v">USD 0,00</div></div>
-        <div class="box"><div class="k">Alícuota diaria utilidades (AUD)</div><div id="r_AUD" class="v">USD 0,00</div></div>
-        <div class="box"><div class="k">Alícuota diaria bono vacacional (ABVD)</div><div id="r_ABVD" class="v">USD 0,00</div></div>
+        <div class="box"><div class="k">AlÃ­cuota diaria utilidades (AUD)</div><div id="r_AUD" class="v">USD 0,00</div></div>
+        <div class="box"><div class="k">AlÃ­cuota diaria bono vacacional (ABVD)</div><div id="r_ABVD" class="v">USD 0,00</div></div>
         <div class="box"><div class="k">Salario diario integral (SDI)</div><div id="r_SDI" class="v">USD 0,00</div></div>
       </div>
     </div>
@@ -560,9 +560,9 @@
       <h2><i class="fa-solid fa-scale-balanced"></i> Prestaciones sociales - Art. 142 LOTTT</h2>
       <div class="results">
         <div class="box"><div class="k">Trimestres laborados</div><div id="r_trimestres" class="v">0</div></div>
-        <div class="box"><div class="k">Días trimestres + fracción</div><div id="r_dias_trimestres" class="v">0</div></div>
-        <div class="box"><div class="k">Días adicionales PS</div><div id="r_dias_adicionales" class="v">0</div></div>
-        <div class="box"><div class="k">Total garantía (A+B)</div><div id="r_total_garantia" class="v">USD 0,00</div></div>
+        <div class="box"><div class="k">DÃ­as trimestres + fracciÃ³n</div><div id="r_dias_trimestres" class="v">0</div></div>
+        <div class="box"><div class="k">DÃ­as adicionales PS</div><div id="r_dias_adicionales" class="v">0</div></div>
+        <div class="box"><div class="k">Total garantÃ­a (A+B)</div><div id="r_total_garantia" class="v">USD 0,00</div></div>
         <div class="box"><div class="k">Total retroactivo (C)</div><div id="r_total_retroactivo" class="v">USD 0,00</div></div>
         <div class="box"><div class="k">PS final (mayor)</div><div id="r_PS" class="v">USD 0,00</div></div>
       </div>
@@ -573,24 +573,24 @@
 
       <div class="grid2">
         <div>
-          <label>Modo de cálculo de intereses</label>
+          <label>Modo de cÃ¡lculo de intereses</label>
           <select id="modo_calculo_intereses">
-            <option value="AUTOMATICO">Automático (SDI actual + promedio tasas BCV)</option>
+            <option value="AUTOMATICO">AutomÃ¡tico (SDI actual + promedio tasas BCV)</option>
             <option value="MANUAL">Manual (ingresar salarios mensuales)</option>
-            <option value="TRIMESTRAL">Trimestral detallado (más preciso)</option>
+            <option value="TRIMESTRAL">Trimestral detallado (mÃ¡s preciso)</option>
           </select>
-          <div class="hint">Selecciona cómo deseas calcular los intereses sobre prestaciones.</div>
+          <div class="hint">Selecciona cÃ³mo deseas calcular los intereses sobre prestaciones.</div>
         </div>
         <div>
           <label>Capital inicial (opcional)</label>
           <input id="capital_intereses" type="number" step="0.01" value="0"/>
-          <div class="hint">Saldo de prestaciones acumulado al inicio del período.</div>
+          <div class="hint">Saldo de prestaciones acumulado al inicio del perÃ­odo.</div>
         </div>
       </div>
 
       <div class="grid2" style="margin-top:10px">
         <div>
-          <label>Fecha inicio del período (12 meses)</label>
+          <label>Fecha inicio del perÃ­odo (12 meses)</label>
           <div class="row">
             <select id="mes_inicio_interes">
               <option value="1">ENERO</option><option value="2">FEBRERO</option><option value="3">MARZO</option>
@@ -603,14 +603,14 @@
           <div id="textoPeriodoIntereses" class="hint"></div>
         </div>
         <div>
-          <label>Días por trimestre (para cálculo trimestral)</label>
+          <label>DÃ­as por trimestre (para cÃ¡lculo trimestral)</label>
           <input id="dias_prestacion_trimestral" type="number" value="15" step="1"/>
-          <div class="hint">Días de prestaciones que se acumulan cada trimestre (por defecto 15).</div>
+          <div class="hint">DÃ­as de prestaciones que se acumulan cada trimestre (por defecto 15).</div>
         </div>
       </div>
 
       <div id="hint_intereses" class="hint" style="margin-bottom:10px">
-        <strong>Modo Automático:</strong> Se usa el SDI actual y se acumulan 5 días trimestrales automáticamente.
+        <strong>Modo AutomÃ¡tico:</strong> Se usa el SDI actual y se acumulan 5 dÃ­as trimestrales automÃ¡ticamente.
       </div>
       
       <div id="seccion_tabla_intereses" style="display:none">
@@ -622,7 +622,7 @@
           <table id="tabla_intereses">
             <thead>
               <tr>
-                <th>Mes / Año</th>
+                <th>Mes / AÃ±o</th>
                 <th id="th_salario" style="display:none">Salario mensual</th>
                 <th>Tasa BCV % anual</th>
               </tr>
@@ -674,7 +674,7 @@
         <div style="font-weight:1000;margin-bottom:6px">Datos del trabajador</div>
         <div class="rgrid">
           <div><strong>Nombre:</strong> <span id="reciboTrabajadorNombre">---</span></div>
-          <div><strong>Cédula/RIF:</strong> <span id="reciboTrabajadorDoc">---</span></div>
+          <div><strong>CÃ©dula/RIF:</strong> <span id="reciboTrabajadorDoc">---</span></div>
           <div><strong>Cargo:</strong> <span id="reciboTrabajadorCargo">---</span></div>
           <div><strong>Tiempo de servicio:</strong> <span id="reciboTiempoServicio">---</span></div>
           <div><strong>Fecha de ingreso:</strong> <span id="reciboFechaIngreso">---</span></div>
@@ -950,7 +950,7 @@ function buildVacPeriodsUI(){
     const dias = getVacAnnualDaysForYearNumber(y);
     const id = `vac_year_${y}`;
     const lbl = document.createElement('label');
-    lbl.innerHTML = `<input type="checkbox" id="${id}"/> Año ${y} (${dias} días)`;
+    lbl.innerHTML = `<input type="checkbox" id="${id}"/> AÃ±o ${y} (${dias} dÃ­as)`;
     list.appendChild(lbl);
 
     const cb = el(id);
@@ -1022,12 +1022,12 @@ function applyVacSelectionToDVDBV(){
     const annual = getVacAnnualDaysForYearNumber(currentYear);
     totalDays = (annual / 12) * monthsFrac;
   } else {
-    // Modo AUTO: calcular días según años completos
+    // Modo AUTO: calcular dÃ­as segÃºn aÃ±os completos
     const yearsComplete = state.anosVAC || 0;
     if(yearsComplete >= 1){
       totalDays = getVacAnnualDaysForYearNumber(yearsComplete);
     } else if(monthsFrac > 0){
-      // Si no hay años completos pero hay meses, calcular proporcionalmente
+      // Si no hay aÃ±os completos pero hay meses, calcular proporcionalmente
       const annual = getVacAnnualDaysForYearNumber(1);
       totalDays = (annual / 12) * monthsFrac;
     } else {
@@ -1106,7 +1106,7 @@ function recalcularTiempoServicio(){
 
   state.totalMonthsServicio = s.totalMonths;
 
-  const txt = `${s.years} año(s), ${s.months} mes(es), ${s.days} día(s)`;
+  const txt = `${s.years} aÃ±o(s), ${s.months} mes(es), ${s.days} dÃ­a(s)`;
   if(box) box.textContent = txt;
 
   const anosVAC = Math.max(0, s.years);
@@ -1123,7 +1123,7 @@ function recalcularTiempoServicio(){
   const daa = Math.min(Math.max(0, anosVAC - 1), 15);
   if(el('DAA')) el('DAA').value = daa;
 
-  // Siempre recalcular DV y DBV automáticamente cuando cambian las fechas
+  // Siempre recalcular DV y DBV automÃ¡ticamente cuando cambian las fechas
   applyVacSelectionToDVDBV();
 }
 
@@ -1202,7 +1202,7 @@ function calcularNomina(){
 function calcularInteresesSolo(){
   const modo = el('modo_calculo_intereses')?.value || 'AUTOMATICO';
   const capIni = parseNumber('capital_intereses');
-  console.log('🔍 Modo:', modo, '| Capital inicial:', capIni);
+  console.log('ðŸ” Modo:', modo, '| Capital inicial:', capIni);
 
   if(modo === 'TRIMESTRAL'){
     calcularInteresesTrimestral(capIni);
@@ -1213,14 +1213,14 @@ function calcularInteresesSolo(){
   }
 }
 
-// Modo AUTOMÁTICO: Usa SDI actual y promedio de tasas
+// Modo AUTOMÃTICO: Usa SDI actual y promedio de tasas
 function calcularInteresesAutomatico(capIni){
   const SDI_FINAL = parseNumber('SDI_FINAL');
   const SDI = SDI_FINAL > 0 ? SDI_FINAL : (state.SDI || 0);
   const diasTrimestre = parseNumber('dias_prestacion_trimestral') || 15;
   const prestacionTrimestral = SDI * diasTrimestre;
   
-  console.log('💰 SDI:', SDI.toFixed(2), '| Prestación trimestral:', prestacionTrimestral.toFixed(2));
+  console.log('ðŸ’° SDI:', SDI.toFixed(2), '| PrestaciÃ³n trimestral:', prestacionTrimestral.toFixed(2));
 
   let totalIntereses = 0;
   let capitalAcumulado = capIni || 0;
@@ -1229,7 +1229,7 @@ function calcularInteresesAutomatico(capIni){
     const tasaAnual = parseNumber(`tasa_mes_${i}`);
     if(!tasaAnual) continue;
 
-    // Fórmula Art. 143: Interés = (C × i × d) / 365
+    // FÃ³rmula Art. 143: InterÃ©s = (C Ã— i Ã— d) / 365
     const diasMes = 30;
     const interesMes = (capitalAcumulado * (tasaAnual/100) * diasMes) / 365;
     totalIntereses += interesMes;
@@ -1237,11 +1237,11 @@ function calcularInteresesAutomatico(capIni){
     // Cada 3 meses acumular prestaciones
     if(i % 3 === 0){
       capitalAcumulado += prestacionTrimestral;
-      console.log(`Trim ${i/3}: +${prestacionTrimestral.toFixed(2)} → Cap: ${capitalAcumulado.toFixed(2)}`);
+      console.log(`Trim ${i/3}: +${prestacionTrimestral.toFixed(2)} â†’ Cap: ${capitalAcumulado.toFixed(2)}`);
     }
   }
 
-  console.log('✅ Total INTERESES:', totalIntereses.toFixed(2));
+  console.log('âœ… Total INTERESES:', totalIntereses.toFixed(2));
   state.INTERESES = totalIntereses;
   setText('r_INTERESES', totalIntereses);
   calcularTotalesSeleccionados();
@@ -1262,42 +1262,42 @@ function calcularInteresesManual(capIni){
     // Convertir salario mensual a salario integral
     const SDN = salarioMensual / 30;
     const AUD = (SDN * DUA) / 360;
-    const ABVD = (SDN * 15) / 360; // Asumiendo 15 días bono
+    const ABVD = (SDN * 15) / 360; // Asumiendo 15 dÃ­as bono
     const SDI = SDN + AUD + ABVD;
     
-    // Calcular interés del mes
+    // Calcular interÃ©s del mes
     const diasMes = 30;
     const interesMes = (capitalAcumulado * (tasaAnual/100) * diasMes) / 365;
     totalIntereses += interesMes;
     
     console.log(`Mes ${i}: Sal=${salarioMensual}, SDI=${SDI.toFixed(2)}, Int=${interesMes.toFixed(2)}`);
     
-    // Acumular 5 días de SDI cada mes (o cada trimestre según configuración)
+    // Acumular 5 dÃ­as de SDI cada mes (o cada trimestre segÃºn configuraciÃ³n)
     if(i % 3 === 0){
       const diasTrimestre = parseNumber('dias_prestacion_trimestral') || 15;
       capitalAcumulado += SDI * diasTrimestre;
     }
   }
 
-  console.log('✅ Total INTERESES:', totalIntereses.toFixed(2));
+  console.log('âœ… Total INTERESES:', totalIntereses.toFixed(2));
   state.INTERESES = totalIntereses;
   setText('r_INTERESES', totalIntereses);
   calcularTotalesSeleccionados();
 }
 
-// Modo TRIMESTRAL: Cálculo más preciso por trimestres
+// Modo TRIMESTRAL: CÃ¡lculo mÃ¡s preciso por trimestres
 function calcularInteresesTrimestral(capIni){
   const diasTrimestre = parseNumber('dias_prestacion_trimestral') || 15;
   const DUA = parseNumber('DUA') || 30;
   
-  // Obtener SDI (puede ser fijo o variable según salarios)
+  // Obtener SDI (puede ser fijo o variable segÃºn salarios)
   const SDI_FINAL = parseNumber('SDI_FINAL');
   const SDI_BASE = SDI_FINAL > 0 ? SDI_FINAL : (state.SDI || 0);
   
   let totalIntereses = 0;
   let capitalAcumulado = capIni || 0;
   
-  console.log('📊 Cálculo TRIMESTRAL detallado:');
+  console.log('ðŸ“Š CÃ¡lculo TRIMESTRAL detallado:');
   console.log('Capital inicial:', capitalAcumulado.toFixed(2));
   
   for(let trim=1; trim<=4; trim++){
@@ -1333,20 +1333,20 @@ function calcularInteresesTrimestral(capIni){
       SDI_trim = SDN + AUD + ABVD;
     }
     
-    // IMPORTANTE: Acumular prestación AL INICIO del trimestre
+    // IMPORTANTE: Acumular prestaciÃ³n AL INICIO del trimestre
     const prestacionTrim = SDI_trim * diasTrimestre;
     capitalAcumulado += prestacionTrim;
     
-    // Calcular interés del trimestre sobre el capital YA acumulado
+    // Calcular interÃ©s del trimestre sobre el capital YA acumulado
     const diasTrim = (trim === 1) ? 90 : (trim === 2) ? 91 : 92;
     const interesTrim = (capitalAcumulado * (tasaPromedio/100) * diasTrim) / 365;
     totalIntereses += interesTrim;
     
-    console.log(`Trim ${trim}: Capital base=${capitalAcumulado.toFixed(2)}, Tasa=${tasaPromedio.toFixed(2)}%, Días=${diasTrim}, Interés=${interesTrim.toFixed(2)}`);
+    console.log(`Trim ${trim}: Capital base=${capitalAcumulado.toFixed(2)}, Tasa=${tasaPromedio.toFixed(2)}%, DÃ­as=${diasTrim}, InterÃ©s=${interesTrim.toFixed(2)}`);
   }
 
-  console.log('✅ Total INTERESES:', totalIntereses.toFixed(2));
-  console.log('💰 Capital final acumulado:', capitalAcumulado.toFixed(2));
+  console.log('âœ… Total INTERESES:', totalIntereses.toFixed(2));
+  console.log('ðŸ’° Capital final acumulado:', capitalAcumulado.toFixed(2));
   state.INTERESES = totalIntereses;
   setText('r_INTERESES', totalIntereses);
   calcularTotalesSeleccionados();
@@ -1504,7 +1504,7 @@ function limpiarFormulario(){
   refrescarTodosLosMontos();
   calcularTotalesSeleccionados();
   
-  // Resetear el sistema de selección
+  // Resetear el sistema de selecciÃ³n
   if(el('cardDatosSeleccionados')) el('cardDatosSeleccionados').style.display = 'none';
   if(el('cardFormularioCalculo')) el('cardFormularioCalculo').style.display = 'none';
   if(el('cardNuevoTrabajador')) el('cardNuevoTrabajador').style.display = 'none';
@@ -1517,7 +1517,7 @@ function limpiarFormulario(){
     if(el('iconListaEmpresas')) el('iconListaEmpresas').className = 'fa-solid fa-chevron-up';
   }
   
-  // Forzar foco en el campo de búsqueda de empresas después de limpiar
+  // Forzar foco en el campo de bÃºsqueda de empresas despuÃ©s de limpiar
   setTimeout(()=>{
     const campoBusqueda = el('empresaSearch');
     if(campoBusqueda){
@@ -1560,7 +1560,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   el('mes_inicio_interes')?.addEventListener('change', actualizarPeriodoIntereses);
   el('interes_anio_inicio')?.addEventListener('change', actualizarPeriodoIntereses);
   
-  // Cambiar modo de cálculo de intereses
+  // Cambiar modo de cÃ¡lculo de intereses
   el('modo_calculo_intereses')?.addEventListener('change', ()=>{
     const modo = el('modo_calculo_intereses').value;
     const hint = el('hint_intereses');
@@ -1570,18 +1570,18 @@ document.addEventListener('DOMContentLoaded', ()=>{
     
     if(hint){
       if(modo === 'AUTOMATICO'){
-        hint.innerHTML = '<strong>Modo Automático:</strong> Se usa el SDI actual y se acumulan prestaciones trimestrales automáticamente.';
-        // Ocultar sección de tabla
+        hint.innerHTML = '<strong>Modo AutomÃ¡tico:</strong> Se usa el SDI actual y se acumulan prestaciones trimestrales automÃ¡ticamente.';
+        // Ocultar secciÃ³n de tabla
         if(seccionTabla) seccionTabla.style.display = 'none';
       } else if(modo === 'MANUAL'){
-        hint.innerHTML = '<strong>Modo Manual:</strong> Ingresa los salarios mensuales. Se convertirán a salario integral automáticamente.';
-        // Mostrar y expandir sección de tabla
+        hint.innerHTML = '<strong>Modo Manual:</strong> Ingresa los salarios mensuales. Se convertirÃ¡n a salario integral automÃ¡ticamente.';
+        // Mostrar y expandir secciÃ³n de tabla
         if(seccionTabla) seccionTabla.style.display = 'block';
         if(contenidoTabla) contenidoTabla.style.display = 'block';
         if(iconTabla) iconTabla.className = 'fa-solid fa-chevron-up';
       } else {
-        hint.innerHTML = '<strong>Modo Trimestral:</strong> Cálculo más preciso usando días exactos por trimestre (90-92 días).';
-        // Mostrar y expandir sección de tabla
+        hint.innerHTML = '<strong>Modo Trimestral:</strong> CÃ¡lculo mÃ¡s preciso usando dÃ­as exactos por trimestre (90-92 dÃ­as).';
+        // Mostrar y expandir secciÃ³n de tabla
         if(seccionTabla) seccionTabla.style.display = 'block';
         if(contenidoTabla) contenidoTabla.style.display = 'block';
         if(iconTabla) iconTabla.className = 'fa-solid fa-chevron-up';
@@ -1589,7 +1589,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     }
     renderFilasIntereses();
     actualizarPeriodoIntereses();
-    prepararEnterTablaIntereses(); // Reconfigurar navegación con Enter
+    prepararEnterTablaIntereses(); // Reconfigurar navegaciÃ³n con Enter
   });
 
   prepararEnterTablaIntereses();
@@ -1600,7 +1600,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     ['change','blur'].forEach(evt=>{
       x.addEventListener(evt, ()=>{
         recalcularTiempoServicio();
-        // Actualizar también los cálculos visuales
+        // Actualizar tambiÃ©n los cÃ¡lculos visuales
         const S_NM = parseNumber('S_NM');
         if(S_NM > 0){
           calcularNomina();
@@ -1612,7 +1612,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   wireRecalc('fecha_desde');
   wireRecalc('fecha_calculo');
 
-  // También recalcular cuando cambie el salario
+  // TambiÃ©n recalcular cuando cambie el salario
   el('S_NM')?.addEventListener('change', ()=>{
     const S_NM = parseNumber('S_NM');
     if(S_NM > 0){
@@ -1650,7 +1650,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
   setCurrency(el('currencySelect')?.value || 'USD');
   
-  // Toggle para mostrar/ocultar sección de base de datos
+  // Toggle para mostrar/ocultar secciÃ³n de base de datos
   el('toggleDbSection')?.addEventListener('click', ()=>{
     const content = el('dbSectionContent');
     const icon = el('iconDbToggle');
@@ -1680,7 +1680,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     }
   });
   
-  // Función global para toggle de secciones
+  // FunciÃ³n global para toggle de secciones
   window.toggleSeccion = function(seccionId) {
     const content = el(seccionId);
     const iconId = 'icon' + seccionId.charAt(0).toUpperCase() + seccionId.slice(1);
@@ -1697,7 +1697,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     }
   };
   
-  // Forzar recálculo inicial si hay fechas
+  // Forzar recÃ¡lculo inicial si hay fechas
   setTimeout(()=>{
     const fi = el('fecha_ingreso')?.value;
     const fc = el('fecha_calculo')?.value;
@@ -1726,7 +1726,7 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-// Detectar si se está ejecutando como PWA instalada
+// Detectar si se estÃ¡ ejecutando como PWA instalada
 window.addEventListener('DOMContentLoaded', () => {
   const isStandalone = window.matchMedia('(display-mode: standalone)').matches 
     || window.navigator.standalone 
@@ -1739,3 +1739,4 @@ window.addEventListener('DOMContentLoaded', () => {
 </script>
 </body>
 </html>
+

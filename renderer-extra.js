@@ -440,6 +440,29 @@ async function cargarListaEmpresas() {
   });
 }
 
+function mostrarFormularioNuevaEmpresa() {
+  const nombre = prompt("Nombre o Razón Social de la empresa:");
+  if (!nombre || nombre.trim() === "") return;
+  
+  const tipoDoc = prompt("Tipo de documento (J/G/V/E):", "J");
+  if (!tipoDoc || tipoDoc.trim() === "") return;
+  
+  const doc = prompt("Número de documento (sin guiones):");
+  if (!doc || doc.trim() === "") return;
+  
+  // Guardar empresa en la base de datos
+  window.dbapi.patronoSave({
+    tipo_doc: tipoDoc.toUpperCase(),
+    doc: doc.trim(),
+    nombre: nombre.trim()
+  }).then(async (result) => {
+    alert(`✅ Empresa "${nombre}" agregada exitosamente!`);
+    // Recargar lista de empresas
+    await cargarListaEmpresas();
+  }).catch(err => {
+    alert(`❌ Error al guardar empresa: ${err.message}`);
+  });
+}
 
 function mostrarFormularioNuevoTrabajador() {
   // Ocultar lista de trabajadores
@@ -568,6 +591,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
   el("empresaSearch")?.addEventListener("input", cargarListaEmpresas);
   el("btnCambiarSeleccion")?.addEventListener("click", cambiarSeleccion);
+  el("btnNuevaEmpresa")?.addEventListener("click", mostrarFormularioNuevaEmpresa);
   
   el("btnNuevoTrabajador")?.addEventListener("click", mostrarFormularioNuevoTrabajador);
   el("btnCancelarNuevoTrabajador")?.addEventListener("click", cancelarNuevoTrabajador);
