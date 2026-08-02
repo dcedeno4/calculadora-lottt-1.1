@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CALCULADORA DE BENEFICIOS Y PRESTACIONES - LOTTT</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --p:#4a7c59;--p2:#6b9b7c;--bg:#eef3ee;--card:#fff;--bd:#d7dfd7;
+      --shadow:0 10px 30px rgba(0,0,0,.15);
+    }
+    body{
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:linear-gradient(180deg,#dfe9df 0%,#eef3ee 40%,#dfe9df 100%);
+      min-height:100vh;padding:18px;color:#1f2933;
+    }
+    .wrap{max-width:1200px;margin:0 auto}
+    .header{
+      background:linear-gradient(135deg,var(--p),var(--p2));
+      color:#fff;border-radius:18px;padding:20px 20px 14px;box-shadow:var(--shadow);
+      margin-bottom:14px;
+    }
+    .header h1{font-size:1.15rem;letter-spacing:.8px;font-weight:900;display:flex;gap:10px;align-items:center}
+    .header p{margin-top:6px;opacity:.95;font-size:.9rem}
+    .header small{display:block;margin-top:8px;opacity:.9}
+    .headerbar{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+    .headerbar .right{display:flex;gap:10px;align-items:center}
+    .badge{
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.25);
+      padding:8px 10px;border-radius:12px;display:flex;gap:8px;align-items:center;
+    }
+    .badge select{
+      width:auto;padding:6px 8px;border-radius:10px;border:1px solid rgba(255,255,255,.35);
+      background:rgba(255,255,255,.12);color:#fff;
+    }
+    .badge select:focus{outline:none;box-shadow:0 0 0 3px rgba(255,255,255,.2)}
+    .badge select option{color:#111}
+
+    .card{
+      background:var(--card);border:1px solid rgba(0,0,0,.06);border-radius:16px;
+      box-shadow:0 2px 8px rgba(0,0,0,.06);padding:14px 16px;margin-bottom:12px;
+    }
+    .card h2{font-size:1rem;font-weight:900;margin-bottom:10px;display:flex;gap:10px;align-items:center}
+    .card h2 i{color:var(--p)}
+    .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 14px}
+    .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 14px}
+    @media (max-width:900px){.grid2,.grid3{grid-template-columns:1fr}}
+    label{font-size:.82rem;font-weight:700;color:#374151}
+    input,select,button{
+      width:100%;padding:9px 10px;border-radius:10px;border:1px solid #d1d5db;font-size:.92rem;
+    }
+    input:focus,select:focus{outline:none;border-color:var(--p);box-shadow:0 0 0 3px rgba(74,124,89,.15)}
+    .hint{font-size:.78rem;color:#6b7280;margin-top:4px;line-height:1.2}
+    .row{display:flex;gap:8px}
+    .row > *{flex:1}
+    .btnrow{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+    .btn{
+      width:auto;border:none;cursor:pointer;font-weight:900;padding:10px 14px;border-radius:12px;
+      display:inline-flex;align-items:center;gap:8px;
+    }
+    .btn.primary{background:linear-gradient(135deg,var(--p),var(--p2));color:#fff}
+    .btn.gray{background:#e5e7eb;color:#111827}
+    .btn.red{background:#ef4444;color:#fff}
+    .results{
+      display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;
+    }
+    .box{background:#f4f7f4;border:1px solid var(--bd);border-radius:14px;padding:10px}
+    .box .k{font-size:.78rem;color:#4b5563}
+    .box .v{font-size:1rem;font-weight:900;margin-top:3px}
+    .checks{display:flex;flex-wrap:wrap;gap:14px;margin-top:6px}
+    .checks label{font-weight:800;font-size:.85rem;display:flex;gap:8px;align-items:center}
+    .checks input{width:auto}
+
+    /* LOGIN */
+    .overlay{
+      position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+      background:radial-gradient(circle at top,#4a7c59 0%,#1f2933 50%,#000 100%);
+      z-index:9999;padding:20px;
+    }
+    .login{
+      width:100%;max-width:560px;background:#fff;border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.35);
+      padding:22px 20px 16px;
+    }
+    .login h1{font-size:1.05rem;font-weight:1000;text-transform:uppercase}
+    .login p{margin-top:6px;color:#4b5563;font-size:.9rem}
+    .msg{min-height:18px;margin-top:8px;font-weight:800;font-size:.85rem}
+    .msg.err{color:#b91c1c}.msg.ok{color:#065f46}
+    .foot{margin-top:10px;font-size:.72rem;color:#6b7280;text-align:center}
+    .pill{
+      display:inline-flex;gap:8px;align-items:center;padding:8px 10px;border-radius:12px;background:#f3f4f6;border:1px solid #e5e7eb;
+      margin-top:10px;width:100%;
+    }
+    .pill select{border:none;background:transparent;padding:0;flex:1}
+    .pill strong{white-space:nowrap}
+
+    /* TABLE */
+    table{width:100%;border-collapse:collapse;font-size:.85rem;margin-top:10px}
+    th,td{border:1px solid #e5e7eb;padding:7px;text-align:right}
+    th:first-child,td:first-child{text-align:left}
+    td input{width:100%;padding:8px;border-radius:10px}
+
+    /* RECEIPT */
+    #receiptContainer{
+      background:#fff;border-radius:16px;border:1px solid rgba(0,0,0,.08);
+      box-shadow:0 2px 10px rgba(0,0,0,.08);
+      padding:16px 18px;margin-top:14px;
+    }
+    .rhead{text-align:center;margin-bottom:10px}
+    .rhead .t{font-size:1.05rem;font-weight:1000;text-transform:uppercase}
+    .rhead .s{font-size:.85rem;color:#374151;margin-top:4px}
+    .rsec{margin-top:10px;border-top:1px solid #e5e7eb;padding-top:8px}
+    .rgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 14px;font-size:.86rem}
+    @media (max-width:900px){.rgrid{grid-template-columns:1fr}}
+    .rline{display:flex;justify-content:space-between;padding:4px 0;font-size:.92rem}
+    .sig{margin-top:26px}
+    .sig .line{border-top:1px solid #111827;padding-top:4px;text-align:center;font-weight:800}
+
+    /* PRINT */
+    @media print{
+      .no-print{display:none!important}
+      body{background:#fff;padding:0}
+      .wrap{max-width:none}
+      #receiptContainer{box-shadow:none;border:1px solid #000;border-radius:0;margin:0}
+    }
+
+    /* MODAL VACACIONES */
+    .modal-backdrop{
+      position:fixed;inset:0;display:none;align-items:center;justify-content:center;
+      background:rgba(0,0,0,.55);z-index:9998;padding:18px;
+    }
+    .modal{
+      width:100%;max-width:820px;background:#fff;border-radius:18px;box-shadow:0 30px 80px rgba(0,0,0,.35);
+      padding:16px 16px 12px;border:1px solid rgba(0,0,0,.1);
+    }
+    .modal h3{font-size:1rem;font-weight:1000;display:flex;gap:10px;align-items:center}
+    .modal p{margin-top:6px;color:#4b5563;font-size:.9rem;line-height:1.25}
+    .modal .toprow{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-top:10px}
+    .modal .left{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .modal .panel{
+      display:grid;grid-template-columns:1.2fr .8fr;gap:12px;margin-top:12px;
+    }
+    @media (max-width:900px){.modal .panel{grid-template-columns:1fr}}
+    .periodos{
+      border:1px solid #e5e7eb;border-radius:14px;padding:10px;background:#f9fafb;
+    }
+    .periodos-head{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-bottom:8px}
+    .periodos-title{font-weight:1000}
+    .periodo-row{
+      display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;
+      padding:10px;border-radius:12px;background:#fff;border:1px solid #e5e7eb;margin-top:8px;
+    }
+    .periodo-row small{color:#6b7280;display:block;margin-top:2px}
+    .pillmini{
+      display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;
+      background:#f3f4f6;border:1px solid #e5e7eb;font-weight:900;font-size:.85rem;
+    }
+    .summary{
+      border:1px solid #e5e7eb;border-radius:14px;padding:10px;background:#f9fafb;
+    }
+    .summary .big{font-size:1.4rem;font-weight:1100;margin-top:6px}
+    .summary .small{color:#6b7280;font-size:.88rem;margin-top:6px;line-height:1.2}
+    .modal .actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:10px}
+  </style>
+</head>
+
+<body>
+
+  <!-- APP -->
+  <div id="appContainer" class="wrap">
+    <div class="header no-print">
+      <div class="headerbar">
+        <div>
+          <h1><i class="fa-solid fa-scale-balanced"></i> CALCULADORA DE BENEFICIOS Y PRESTACIONES - LOTTT</h1>
+          <p>Cálculo de vacaciones, bono, utilidades, prestaciones e intereses (Venezuela).</p>
+          <small>Derechos reservados y prohibida su comercialización por rastreo en línea.</small>
+        </div>
+
+        <div class="right">
+          <div class="badge">
+            <i class="fa-solid fa-coins"></i>
+            <strong>Moneda</strong>
+            <select id="currencySelectApp">
+              <option value="USD">USD</option>
+              <option value="BS">BS</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Datos patrono/trabajador -->
+    <div class="card no-print">
+      <h2><i class="fa-solid fa-user-tie"></i> Datos del patrono y del trabajador</h2>
+
+      <div class="grid2">
+        <div>
+          <label>Nombre o razón social del Patrono</label>
+          <input id="patrono_nombre" class="to-upper" type="text"/>
+        </div>
+        <div>
+          <label>Documento del Patrono</label>
+          <div class="row">
+            <select id="patrono_tipo_doc" style="max-width:92px">
+              <option value="J">J</option><option value="G">G</option><option value="V">V</option><option value="E">E</option>
+            </select>
+            <input id="patrono_doc" class="to-upper" type="text" placeholder="00000000"/>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid3" style="margin-top:10px">
+        <div>
+          <label>Nombre y apellido del Trabajador</label>
+          <input id="trabajador_nombre" class="to-upper" type="text"/>
+        </div>
+        <div>
+          <label>Cédula / RIF del Trabajador</label>
+          <div class="row">
+            <select id="trabajador_tipo_doc" style="max-width:92px">
+              <option value="V">V</option><option value="E">E</option><option value="J">J</option>
+            </select>
+            <input id="trabajador_doc" class="to-upper" type="text" placeholder="00000000"/>
+          </div>
+        </div>
+        <div>
+          <label>Cargo</label>
+          <input id="trabajador_cargo" class="to-upper" type="text"/>
+        </div>
+      </div>
+
+      <div class="grid3" style="margin-top:10px">
+        <div>
+          <label>Fecha de ingreso</label>
+          <input id="fecha_ingreso" type="date"/>
+          <div class="hint">Cambie la fecha y luego presione ENTER en "Fecha de cálculo" para abrir vacaciones.</div>
+        </div>
+        <div>
+          <label>Fecha de cálculo / egreso</label>
+          <input id="fecha_calculo" type="date"/>
+          <div class="hint"><strong>Presione ENTER</strong> aquí para abrir el cálculo por aniversario.</div>
+        </div>
+        <div>
+          <label>Tiempo de servicio</label>
+          <div id="tiempo_servicio_texto" class="hint">---</div>
+          <input id="anios_servicio" type="hidden" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Datos salariales -->
+    <div class="card no-print">
+      <h2><i class="fa-solid fa-money-check-dollar"></i> Datos salariales y parámetros</h2>
+
+      <div class="grid3">
+        <div>
+          <label>Salario normal mensual (S_NM)</label>
+          <input id="S_NM" type="number" min="0" step="0.01" value="0"/>
+          <div class="hint">Base fija mensual.</div>
+        </div>
+        <div>
+          <label>Días de utilidades anuales (DUA)</label>
+          <input id="DUA" type="number" min="30" step="1" value="30"/>
+          <div class="hint">Mínimo legal 30 días (modificable).</div>
+        </div>
+        <div>
+          <label>Último salario diario integral (SDI_FINAL)</label>
+          <input id="SDI_FINAL" type="number" min="0" step="0.01" value="0"/>
+          <div class="hint">Se trae del SDI automáticamente (si está en 0). Puede ajustarse.</div>
+        </div>
+      </div>
+
+      <div class="grid3" style="margin-top:10px">
+        <div>
+          <label>Días adicionales por antigüedad (DAA)</label>
+          <input id="DAA" type="number" value="0" readonly />
+          <div class="hint">Automático: 1 día por año desde el 2do (tope 15).</div>
+        </div>
+        <div>
+          <label>Días de vacaciones a pagar (DV)</label>
+          <input id="DV" type="number" step="0.01" value=""/>
+          <div class="hint">Se define desde el modal por aniversario (editable).</div>
+        </div>
+        <div>
+          <label>Días de bono vacacional a pagar (DBV)</label>
+          <input id="DBV" type="number" step="0.01" value=""/>
+          <div class="hint">Se define desde el modal por aniversario (editable).</div>
+        </div>
+      </div>
+
+      <div class="btnrow">
+        <button class="btn primary" id="btnCalcular"><i class="fa-solid fa-calculator"></i> CALCULAR</button>
+        <button class="btn gray" id="btnLimpiar"><i class="fa-solid fa-eraser"></i> LIMPIAR</button>
+      </div>
+    </div>
+
+    <!-- Resultados base -->
+    <div class="card no-print">
+      <h2><i class="fa-solid fa-coins"></i> Salario base y diario</h2>
+      <div class="results">
+        <div class="box"><div class="k">Salario diario normal (SDN)</div><div id="r_SDN" class="v"></div></div>
+        <div class="box"><div class="k">Alícuota diaria utilidades (AUD)</div><div id="r_AUD" class="v"></div></div>
+        <div class="box"><div class="k">Alícuota diaria bono vacacional (ABVD)</div><div id="r_ABVD" class="v"></div></div>
+        <div class="box"><div class="k">Salario diario integral (SDI)</div><div id="r_SDI" class="v"></div></div>
+      </div>
+    </div>
+
+    <!-- Beneficios -->
+    <div class="card no-print">
+      <h2><i class="fa-solid fa-gift"></i> Beneficios</h2>
+      <div class="results">
+        <div class="box"><div class="k">Vacaciones (CPV)</div><div id="r_CPV" class="v"></div></div>
+        <div class="box"><div class="k">Bono vacacional (CBV)</div><div id="r_CBV" class="v"></div></div>
+        <div class="box"><div class="k">Utilidades</div><div id="r_UTIL" class="v"></div></div>
+      </div>
+    </div>
+
+    <!-- PS -->
+    <div class="card no-print">
+      <h2><i class="fa-solid fa-scale-balanced"></i> Prestaciones sociales - Art. 142 LOTTT</h2>
+      <div class="results">
+        <div class="box"><div class="k">Trimestres laborados</div><div id="r_trimestres" class="v">0</div></div>
+        <div class="box"><div class="k">Días trimestres + fracción</div><div id="r_dias_trimestres" class="v">0</div></div>
+        <div class="box"><div class="k">Días adicionales PS</div><div id="r_dias_adicionales" class="v">0</div></div>
+        <div class="box"><div class="k">Total garantía (A+B)</div><div id="r_total_garantia" class="v"></div></div>
+        <div class="box"><div class="k">Total retroactivo (C)</div><div id="r_total_retroactivo" class="v"></div></div>
+        <div class="box"><div class="k">PS final (mayor)</div><div id="r_PS" class="v"></div></div>
+      </div>
+    </div>
+
+    <!-- Intereses -->
+    <div class="card no-print">
+      <h2><i class="fa-solid fa-percent"></i> Intereses sobre prestaciones - Art. 143 LOTTT</h2>
+
+      <div class="grid2">
+        <div>
+          <label>Capital inicial (opcional)</label>
+          <input id="capital_intereses" type="number" step="0.01" value="0"/>
+          <div class="hint">Si ya existe capital acumulado histórico, colóquelo aquí. Si no, 0.</div>
+        </div>
+        <div>
+          <label>Fecha inicio del período (12 meses)</label>
+          <div class="row">
+            <select id="mes_inicio_interes">
+              <option value="1">ENERO</option><option value="2">FEBRERO</option><option value="3">MARZO</option>
+              <option value="4">ABRIL</option><option value="5">MAYO</option><option value="6">JUNIO</option>
+              <option value="7">JULIO</option><option value="8">AGOSTO</option><option value="9">SEPTIEMBRE</option>
+              <option value="10">OCTUBRE</option><option value="11">NOVIEMBRE</option><option value="12">DICIEMBRE</option>
+            </select>
+            <select id="interes_anio_inicio"></select>
+          </div>
+          <div id="textoPeriodoIntereses" class="hint"></div>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Mes / Año</th>
+            <th>Salario mensual</th>
+            <th>Tasa BCV % anual</th>
+          </tr>
+        </thead>
+        <tbody id="tbodyIntereses"></tbody>
+      </table>
+
+      <div class="results" style="margin-top:10px">
+        <div class="box"><div class="k">Total intereses</div><div id="r_INTERESES" class="v"></div></div>
+      </div>
+
+      <div class="btnrow">
+        <button class="btn primary" id="btnCalcularIntereses"><i class="fa-solid fa-percent"></i> CALCULAR INTERESES</button>
+      </div>
+    </div>
+
+    <!-- Totales + selección -->
+    <div class="card no-print">
+      <h2><i class="fa-solid fa-file-invoice-dollar"></i> Totales y recibo</h2>
+
+      <label>Conceptos a pagar en este recibo</label>
+      <div class="checks">
+        <label><input type="checkbox" id="chkVac" checked/> Vacaciones</label>
+        <label><input type="checkbox" id="chkBono" checked/> Bono vacacional</label>
+        <label><input type="checkbox" id="chkUtil" checked/> Utilidades</label>
+        <label><input type="checkbox" id="chkPS" checked/> Prestaciones (PS)</label>
+        <label><input type="checkbox" id="chkInt" checked/> Intereses PS</label>
+      </div>
+
+      <div class="results" style="margin-top:10px">
+        <div class="box"><div class="k">Total capital (seleccionado)</div><div id="r_TOTAL_CAPITAL" class="v"></div></div>
+        <div class="box"><div class="k">Intereses (seleccionado)</div><div id="r_TOTAL_INTERESES" class="v"></div></div>
+        <div class="box"><div class="k"><strong>TOTAL GENERAL</strong></div><div id="r_TOTAL_GENERAL" class="v"></div></div>
+      </div>
+
+      <div class="btnrow">
+        <button class="btn primary" id="btnImprimir"><i class="fa-solid fa-print"></i> IMPRIMIR / GUARDAR PDF</button>
+      </div>
+    </div>
+
+    <!-- RECIBO -->
+    <div id="receiptContainer">
+      <div class="rhead">
+        <div class="t">RECIBO DE PAGO</div>
+        <div class="s" id="reciboEmpresa">PATRONO: ---</div>
+      </div>
+
+      <div class="rsec">
+        <div style="font-weight:1000;margin-bottom:6px">Datos del trabajador</div>
+        <div class="rgrid">
+          <div><strong>Nombre:</strong> <span id="reciboTrabajadorNombre">---</span></div>
+          <div><strong>Cédula/RIF:</strong> <span id="reciboTrabajadorDoc">---</span></div>
+          <div><strong>Cargo:</strong> <span id="reciboTrabajadorCargo">---</span></div>
+          <div><strong>Tiempo de servicio:</strong> <span id="reciboTiempoServicio">---</span></div>
+          <div><strong>Fecha de ingreso:</strong> <span id="reciboFechaIngreso">---</span></div>
+          <div><strong>Fecha de egreso/cálculo:</strong> <span id="reciboFechaCalculo">---</span></div>
+        </div>
+      </div>
+
+      <div class="rsec">
+        <div style="font-weight:1000;margin-bottom:6px">Conceptos seleccionados</div>
+
+        <div class="rline" id="rowReciboCPV"><span>Vacaciones</span><strong id="reciboCPV"></strong></div>
+        <div class="rline" id="rowReciboCBV"><span>Bono vacacional</span><strong id="reciboCBV"></strong></div>
+        <div class="rline" id="rowReciboUTIL"><span>Utilidades</span><strong id="reciboUTIL"></strong></div>
+        <div class="rline" id="rowReciboPS"><span>Prestaciones sociales (Art. 142)</span><strong id="reciboPS"></strong></div>
+        <div class="rline" id="rowReciboINTERESES"><span>Intereses sobre PS (Art. 143)</span><strong id="reciboINTERESES"></strong></div>
+
+        <div class="rline" style="border-top:1px solid #111827;margin-top:6px;padding-top:6px">
+          <span><strong>TOTAL GENERAL</strong></span>
+          <strong id="reciboTOTAL"></strong>
+        </div>
+      </div>
+
+      <div class="sig">
+        <div class="line">TRABAJADOR: <span id="firmaTrabajadorNombre">---</span> - <span id="firmaTrabajadorDoc">---</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MODAL VACACIONES/BONO -->
+  <div id="modalVac" class="modal-backdrop">
+    <div class="modal">
+      <h3><i class="fa-solid fa-umbrella-beach"></i> Vacaciones y Bono Vacacional por aniversario</h3>
+      <p>
+        Indique como desea liquidar Vacaciones y Bono Vacacional:
+        <br>- <strong>SOLO ULTIMO PERIODO:</strong> paga solo la fraccion del ano aniversario actual (asume anos anteriores pagados).
+        <br>- <strong>SELECCIONAR PERIODOS:</strong> marque los anos aniversario acumulados sin pagar/disfrutar y el sistema los suma.
+      </p>
+
+      <div class="toprow">
+        <div class="left">
+          <div class="pillmini"><i class="fa-solid fa-sliders"></i>
+            <select id="vacMode" style="border:none;background:transparent;font-weight:1000">
+              <option value="ultimo">SOLO ULTIMO PERIODO (FRACCION)</option>
+              <option value="seleccionar">SELECCIONAR PERIODOS (ACUMULADAS)</option>
+            </select>
+          </div>
+
+          <button class="btn gray" id="btnVacTodos"><i class="fa-solid fa-check-double"></i> Todos</button>
+          <button class="btn gray" id="btnVacNinguno"><i class="fa-solid fa-xmark"></i> Ninguno</button>
+        </div>
+
+        <div class="left">
+          <span class="pillmini"><i class="fa-regular fa-calendar"></i> <span id="vacInfoFechas">---</span></span>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="periodos">
+          <div class="periodos-head">
+            <div class="periodos-title">Periodos aniversario</div>
+          </div>
+          <div id="vacLista"></div>
+        </div>
+
+        <div class="summary">
+          <div style="font-weight:1000">Dias resultantes (Vacaciones / Bono)</div>
+          <div id="vacDiasResultado" class="big">0.00</div>
+          <div id="vacDetalle" class="small">---</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn gray" id="btnVacCerrar"><i class="fa-solid fa-circle-xmark"></i> CERRAR</button>
+        <button class="btn primary" id="btnVacAplicar"><i class="fa-solid fa-check"></i> APLICAR A DV / DBV</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+
+const state = {
+  currency: 'USD',
+  totalMonthsServicio: 0,
+  anosVAC: 0,
+  anosPS: 0,
+  y:0, m:0, d:0,
+
+  // base
+  SDN:0, AUD:0, ABVD:0, SDI:0,
+
+  // montos
+  CPV:0, CBV:0, UTIL:0, PS:0, INTERESES:0
+};
+
+const MESES_ES = ['ENERO','FEBRERO','MARZO','ABRIL','MAYO','JUNIO','JULIO','AGOSTO','SEPTIEMBRE','OCTUBRE','NOVIEMBRE','DICIEMBRE'];
+
+function el(id){ return document.getElementById(id); }
+function normalize(s){ return (s||'').trim().toUpperCase(); }
+
+}
+
+function moneyPrefix(){ return (state.currency === 'BS') ? 'BS ' : 'USD '; }
+function formatMoney(v){
+  const n = Number(v||0);
+  const f = new Intl.NumberFormat('es-VE',{minimumFractionDigits:2,maximumFractionDigits:2}).format(n);
+  return moneyPrefix()+f;
+}
+function setText(id, v){
+  const x = el(id);
+  if(x) x.textContent = formatMoney(v||0);
+}
+function parseNumber(id){
+  const x = el(id);
+  if(!x) return 0;
+  const raw = String(x.value ?? '').trim();
+  if(!raw) return 0;
+  const v = parseFloat(raw.replace(',', '.'));
+  return isNaN(v) ? 0 : v;
+}
+
+function setCurrency(cur){
+  state.currency = cur;
+  if(el('currencySelect')) el('currencySelect').value = cur;
+  if(el('currencySelectApp')) el('currencySelectApp').value = cur;
+  repaintAll();
+}
+
+function repaintAll(){
+  // base
+  setText('r_SDN', state.SDN);
+  setText('r_AUD', state.AUD);
+  setText('r_ABVD', state.ABVD);
+  setText('r_SDI', state.SDI);
+
+  // beneficios
+  setText('r_CPV', state.CPV);
+  setText('r_CBV', state.CBV);
+  setText('r_UTIL', state.UTIL);
+
+  // ps + intereses
+  setText('r_total_garantia', parseNumber('_dummy_total_garantia') || 0); // no visible, se setea igual abajo
+  setText('r_total_retroactivo', parseNumber('_dummy_total_retroactivo') || 0); // idem
+  setText('r_PS', state.PS);
+  setText('r_INTERESES', state.INTERESES);
+
+  // totales
+  calcularTotalesSeleccionados();
+}
+
+/* =========================
+   TASAS BCV (precargadas)
+========================= */
+const BCV_RATES = {
+  2025: {1:47.69,2:47.69,3:47.68,4:47.65,5:47.61,6:47.64,7:47.61,8:47.53,9:47.53,10:47.53,11:47.53,12:47.53},
+  2024: {1:46.92,2:47.30,3:47.49,4:47.49,5:47.60,6:47.63,7:47.60,8:47.63,9:47.62,10:47.65,11:47.65,12:47.56}
+};
+
+function cargarAniosBCV(){
+  const sel = el('interes_anio_inicio');
+  if(!sel) return;
+  const years = Object.keys(BCV_RATES).map(x=>parseInt(x,10)).sort((a,b)=>b-a);
+  sel.innerHTML = '';
+  years.forEach(y=>{
+    const opt=document.createElement('option');
+    opt.value=y; opt.textContent=y;
+    sel.appendChild(opt);
+  });
+  if(years.length) sel.value = years[0];
+}
+
+function renderFilasIntereses(){
+  const tb = el('tbodyIntereses');
+  if(!tb) return;
+  tb.innerHTML = '';
+  for(let i=1;i<=12;i++){
+    const tr=document.createElement('tr');
+    tr.innerHTML = `
+      <td><span class="mes-label" data-i="${i-1}">MES ${i}</span></td>
+      <td><input type="number" id="salario_mes_${i}" step="0.01"></td>
+      <td><input type="number" id="tasa_mes_${i}" step="0.01"></td>
+    `;
+    tb.appendChild(tr);
+  }
+}
+
+function prepararEdicionTasas(){
+  for(let i=1;i<=12;i++){
+    const t=el('tasa_mes_'+i);
+    if(t){
+      t.addEventListener('input', ()=> t.dataset.userEdit='1');
+    }
+  }
+}
+
+function actualizarPeriodoIntereses(){
+  const selMes = el('mes_inicio_interes');
+  const selAnio = el('interes_anio_inicio');
+  const info = el('textoPeriodoIntereses');
+  if(!selMes || !selAnio) return;
+
+  const mesInicio = parseInt(selMes.value,10);
+  const anioInicio = parseInt(selAnio.value,10);
+  if(isNaN(mesInicio)||isNaN(anioInicio)) return;
+
+  const idxFin=(mesInicio-1)+11;
+  const anioFin = anioInicio + Math.floor(idxFin/12);
+  const mesFin = (idxFin%12)+1;
+
+  if(info){
+    info.textContent = `${MESES_ES[mesInicio-1]} ${anioInicio} a ${MESES_ES[mesFin-1]} ${anioFin} (12 meses)`;
+  }
+
+  for(let i=0;i<12;i++){
+    const idx=(mesInicio-1)+i;
+    const anio=anioInicio+Math.floor(idx/12);
+    const mes=(idx%12)+1;
+
+    const label=document.querySelector(`.mes-label[data-i="${i}"]`);
+    if(label) label.textContent = `${MESES_ES[mes-1]} ${anio}`;
+
+    const t=el('tasa_mes_'+(i+1));
+    if(t){
+      const tasa=BCV_RATES?.[anio]?.[mes];
+      if(tasa!=null && !t.dataset.userEdit){
+        t.value = Number(tasa).toFixed(2);
+      }
+    }
+  }
+}
+
+/* =========================
+   TIEMPO DE SERVICIO (2 reglas)
+========================= */
+function daysInMonth(y, mIndex){ return new Date(y, mIndex+1, 0).getDate(); }
+
+function recalcularTiempoServicio(){
+  const fIng = el('fecha_ingreso')?.value;
+  const fCal = el('fecha_calculo')?.value;
+  const out = el('tiempo_servicio_texto');
+
+  if(!fIng || !fCal){
+    if(out) out.textContent='---';
+    state.totalMonthsServicio=0; state.anosVAC=0; state.anosPS=0; state.y=0; state.m=0; state.d=0;
+    return;
+  }
+
+  const dIni=new Date(fIng), dFin=new Date(fCal);
+  if(dFin<dIni){
+    if(out) out.textContent='Fechas inválidas';
+    state.totalMonthsServicio=0; state.anosVAC=0; state.anosPS=0; state.y=0; state.m=0; state.d=0;
+    return;
+  }
+
+  let y=dFin.getFullYear()-dIni.getFullYear();
+  let m=dFin.getMonth()-dIni.getMonth();
+  let d=dFin.getDate()-dIni.getDate();
+
+  if(d<0){
+    m-=1;
+    const prevMonth=(dFin.getMonth()-1+12)%12;
+    const prevYear = prevMonth===11 ? dFin.getFullYear()-1 : dFin.getFullYear();
+    d += daysInMonth(prevYear, prevMonth);
+  }
+  if(m<0){ y-=1; m+=12; }
+
+  state.y = y; state.m = m; state.d = d;
+
+  // meses totales (si hay dias, cuenta 1 mes adicional como excel)
+  let totalMonths=y*12+m;
+  if(d>0) totalMonths+=1;
+  state.totalMonthsServicio=totalMonths;
+
+  // anos VAC completos reales
+  state.anosVAC = y;
+
+  // anos PS con regla fraccion >6m
+  state.anosPS = y + (m > 6 ? 1 : 0);
+  if(el('anios_servicio')) el('anios_servicio').value = String(state.anosPS);
+
+  if(out) out.textContent = `${y} años, ${m} meses, ${d} días`;
+
+  // DAA vac/bono (1 dia por ano desde el 2do)
+  let daa=0;
+  if(state.anosVAC>=2) daa = Math.min(state.anosVAC-1, 15);
+  if(el('DAA')) el('DAA').value = String(daa);
+
+  // NOTA: DV/DBV se definen preferiblemente desde el modal.
+}
+
+/* =========================
+   VACACIONES MODAL (aniversario)
+========================= */
+let vacPeriods = [];
+
+function diasAnualesPorAnoServicio(anoServicio){ // anoServicio: 1,2,3...
+  const extra = Math.min(Math.max(anoServicio - 1, 0), 15);
+  return Math.min(15 + extra, 30);
+}
+
+function buildVacPeriods(){
+  vacPeriods = [];
+  const fIng = el('fecha_ingreso')?.value;
+  const fCal = el('fecha_calculo')?.value;
+  if(!fIng || !fCal) return;
+
+  const dIni = new Date(fIng);
+  const dFin = new Date(fCal);
+  if(dFin < dIni) return;
+
+  const y = state.y;
+  const m = state.m;
+  const d = state.d;
+
+  // periodos completos 1..y
+  for(let i=1;i<=y;i++){
+    const start = new Date(dIni);
+    start.setFullYear(dIni.getFullYear() + (i-1));
+    const end = new Date(dIni);
+    end.setFullYear(dIni.getFullYear() + i);
+
+    const dias = diasAnualesPorAnoServicio(i);
+
+    vacPeriods.push({
+      id: `P${i}`,
+      label: `Periodo ${i}`,
+      range: `${String(start.getDate()).padStart(2,'0')}/${String(start.getMonth()+1).padStart(2,'0')}/${start.getFullYear()} -> ${String(end.getDate()).padStart(2,'0')}/${String(end.getMonth()+1).padStart(2,'0')}/${end.getFullYear()}`,
+      mesesTexto: `12 meses`,
+      dias: dias,
+      selected: false,
+      isFraction: false
+    });
+  }
+
+  // fraccion del ano actual (y+1)
+  const monthsFracExact = Math.min((m + (d/30)), 12);
+  if(monthsFracExact > 0){
+    const anoActual = y + 1;
+    const diasAno = diasAnualesPorAnoServicio(anoActual);
+    const diasFrac = (diasAno/12) * monthsFracExact;
+
+    const start = new Date(dIni);
+    start.setFullYear(dIni.getFullYear() + y);
+    const end = dFin;
+
+    vacPeriods.push({
+      id: `F${anoActual}`,
+      label: `Periodo ${anoActual} (Fraccion)`,
+      range: `${String(start.getDate()).padStart(2,'0')}/${String(start.getMonth()+1).padStart(2,'0')}/${start.getFullYear()} -> ${String(end.getDate()).padStart(2,'0')}/${String(end.getMonth()+1).padStart(2,'0')}/${end.getFullYear()}`,
+      mesesTexto: `${Math.max(1,Math.round(monthsFracExact*10)/10)} mes(es)`,
+      dias: diasFrac,
+      selected: true,
+      isFraction: true,
+      detalle: `Ultimo periodo (Ano ${anoActual} prorrateado): (${diasAno}/12) x ${monthsFracExact.toFixed(2)} = ${diasFrac.toFixed(2)} dias`
+    });
+  } else {
+    // si NO hay fraccion, igual creamos un "fraccion 0" para modo ultimo periodo
+    const anoActual = y + 1;
+    const diasAno = diasAnualesPorAnoServicio(anoActual);
+    vacPeriods.push({
+      id: `F${anoActual}`,
+      label: `Periodo ${anoActual} (Fraccion)`,
+      range: `Sin fraccion (0 meses)`,
+      mesesTexto: `0 mes(es)`,
+      dias: 0,
+      selected: true,
+      isFraction: true,
+      detalle: `Ultimo periodo (Ano ${anoActual}): 0.00 dias`
+    });
+  }
+}
+
+function renderVacModal(){
+  buildVacPeriods();
+
+  const lista = el('vacLista');
+  const info = el('vacInfoFechas');
+  const fIng = el('fecha_ingreso')?.value || '---';
+  const fCal = el('fecha_calculo')?.value || '---';
+  if(info) info.textContent = `Ingreso: ${fIng} | Calculo: ${fCal}`;
+
+  if(!lista) return;
+  lista.innerHTML = '';
+
+  vacPeriods.forEach((p, idx)=>{
+    const row = document.createElement('div');
+    row.className = 'periodo-row';
+
+    row.innerHTML = `
+      <div>
+        <input type="checkbox" id="vac_chk_${idx}" ${p.selected ? 'checked':''} />
+      </div>
+      <div style="text-align:left">
+        <div style="font-weight:1000">${p.label}</div>
+        <small>${p.range}</small>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
+        <span class="pillmini">${p.mesesTexto}</span>
+        <div style="font-weight:1100">${p.dias.toFixed(2)}</div>
+      </div>
+    `;
+
+    lista.appendChild(row);
+
+    const chk = el(`vac_chk_${idx}`);
+    if(chk){
+      chk.addEventListener('change', ()=>{
+        p.selected = chk.checked;
+        updateVacSummary();
+      });
+    }
+  });
+
+  // por defecto modo = ultimo: seleccionar solo fraccion
+  const mode = el('vacMode')?.value || 'ultimo';
+  applyVacMode(mode);
+  updateVacSummary();
+}
+
+function applyVacMode(mode){
+  if(mode === 'ultimo'){
+    vacPeriods.forEach(p => p.selected = !!p.isFraction);
+  } else {
+    // seleccionar: no tocar selecciones del usuario (dejamos como esten)
+  }
+  // refrescar checks
+  vacPeriods.forEach((p, idx)=>{
+    const chk = el(`vac_chk_${idx}`);
+    if(chk) chk.checked = p.selected;
+  });
+  updateVacSummary();
+}
+
+function updateVacSummary(){
+  const totalDias = vacPeriods.filter(p=>p.selected).reduce((s,p)=>s+p.dias,0);
+  if(el('vacDiasResultado')) el('vacDiasResultado').textContent = totalDias.toFixed(2);
+
+  const fr = vacPeriods.find(p=>p.isFraction);
+  const mode = el('vacMode')?.value || 'ultimo';
+
+  let detalle = '---';
+  if(mode === 'ultimo'){
+    detalle = fr?.detalle || 'Solo ultimo periodo seleccionado.';
+  } else {
+    const sel = vacPeriods.filter(p=>p.selected);
+    detalle = sel.length
+      ? `Periodos seleccionados: ${sel.map(x=>x.label).join(', ')}`
+      : 'Ningun periodo seleccionado.';
+  }
+  if(el('vacDetalle')) el('vacDetalle').textContent = detalle;
+}
+
+function openVacModal(){
+  if(!el('fecha_ingreso')?.value || !el('fecha_calculo')?.value) return;
+  recalcularTiempoServicio();
+  renderVacModal();
+  el('modalVac').style.display = 'flex';
+}
+
+function closeVacModal(){
+  el('modalVac').style.display = 'none';
+}
+
+function aplicarVacModal(){
+  const totalDias = vacPeriods.filter(p=>p.selected).reduce((s,p)=>s+p.dias,0);
+  if(el('DV')) el('DV').value = totalDias.toFixed(2);
+  if(el('DBV')) el('DBV').value = totalDias.toFixed(2);
+  closeVacModal();
+}
+
+/* =========================
+   INTERESES Art.143 (mes a mes)
+========================= */
+function computeIntereses(){
+  let capital=parseNumber('capital_intereses');
+  if(capital<0) capital=0;
+
+  let total=0;
+  for(let i=1;i<=12;i++){
+    const salario=parseNumber('salario_mes_'+i);
+    const tasaAnual=parseNumber('tasa_mes_'+i);
+
+    if(salario>0){
+      const sdnMes=salario/30;
+      capital += (sdnMes*5);
+    }
+    if(tasaAnual>0 && capital>0){
+      const tasaMensual=(tasaAnual/100)/12;
+      const interes=capital*tasaMensual;
+      total += interes;
+      capital += interes;
+    }
+  }
+  return total;
+}
+function calcularInteresesSolo(){
+  state.INTERESES = computeIntereses();
+  setText('r_INTERESES', state.INTERESES);
+  calcularTotalesSeleccionados();
+}
+
+/* =========================
+   CALCULO PRINCIPAL (SDI correcto)
+========================= */
+function calcularNomina(){
+  const S_NM=parseNumber('S_NM');
+
+  let DUA=parseNumber('DUA');
+  if(DUA<30) DUA=30;
+  if(el('DUA')) el('DUA').value=String(DUA);
+
+  const SDN = (S_NM>0) ? (S_NM/30) : 0;
+  const AUD = (SDN*DUA)/360;
+
+  const DAA=parseNumber('DAA');
+
+  // ABVD: base 15 + DAA solo si ya cumplio 1 ano completo
+  let DBV_BASE_SDI = 15;
+  if(state.anosVAC>=1){
+    DBV_BASE_SDI = Math.min(15+DAA, 30);
+  }
+  const ABVD=(SDN*DBV_BASE_SDI)/360;
+
+  const SDI = SDN + AUD + ABVD;
+
+  // SDI_FINAL default si esta en 0
+  let SDI_FINAL=SDI;
+  const sdiF=el('SDI_FINAL');
+  if(sdiF){
+    const cur=parseFloat(String(sdiF.value||'').replace(',','.'));
+    if(!cur || isNaN(cur) || cur<=0){
+      sdiF.value = SDI.toFixed(2);
+      SDI_FINAL = SDI;
+    } else {
+      SDI_FINAL = cur;
+    }
+  }
+
+  const DV=parseNumber('DV');
+  const DBV=parseNumber('DBV');
+
+  // PS (Art 142)
+  const totalMonths=state.totalMonthsServicio;
+
+  const fullQuarters=Math.floor(totalMonths/3);
+  const remainingMonths=totalMonths - fullQuarters*3;
+
+  const diasTrimestres=fullQuarters*15;
+  const diasFraccion=remainingMonths*5;
+
+  let diasAdicPS=0;
+  if(state.anosPS>=2) diasAdicPS = Math.min((state.anosPS-1)*2, 30);
+
+  const garantiaAB = ((diasTrimestres + diasFraccion)*SDI) + (diasAdicPS*SDI);
+  const retroactivo = (state.anosPS*30) * SDI_FINAL;
+  const PS = Math.max(garantiaAB, retroactivo);
+
+  const CPV = DV*SDN;
+  const CBV = DBV*SDN;
+
+  let diasUtil=DUA;
+  if(totalMonths<12) diasUtil = DUA*(totalMonths/12);
+  const UTIL = SDN*diasUtil;
+
+  state.SDN = SDN; state.AUD = AUD; state.ABVD = ABVD; state.SDI = SDI;
+  state.CPV=CPV; state.CBV=CBV; state.UTIL=UTIL; state.PS=PS;
+
+  // intereses no obligatorios, pero se calculan si la tabla esta usada
+  state.INTERESES = computeIntereses();
+
+  // pintar
+  setText('r_SDN', SDN);
+  setText('r_AUD', AUD);
+  setText('r_ABVD', ABVD);
+  setText('r_SDI', SDI);
+
+  setText('r_CPV', CPV);
+  setText('r_CBV', CBV);
+  setText('r_UTIL', UTIL);
+
+  if(el('r_trimestres')) el('r_trimestres').textContent=String(fullQuarters);
+  if(el('r_dias_trimestres')) el('r_dias_trimestres').textContent=String(diasTrimestres + diasFraccion);
+  if(el('r_dias_adicionales')) el('r_dias_adicionales').textContent=String(diasAdicPS);
+
+  setText('r_total_garantia', garantiaAB);
+  setText('r_total_retroactivo', retroactivo);
+  setText('r_PS', PS);
+  setText('r_INTERESES', state.INTERESES);
+
+  calcularTotalesSeleccionados();
+}
+
+/* =========================
+   TOTALES + RECIBO
+========================= */
+function calcularTotalesSeleccionados(){
+  const chkVac = el('chkVac')?.checked ?? false;
+  const chkBono= el('chkBono')?.checked ?? false;
+  const chkUtil= el('chkUtil')?.checked ?? false;
+  const chkPS  = el('chkPS')?.checked ?? false;
+  const chkInt = el('chkInt')?.checked ?? false;
+
+  const capVac = chkVac ? state.CPV : 0;
+  const capBono= chkBono? state.CBV : 0;
+  const capUtil= chkUtil? state.UTIL: 0;
+  const capPS  = chkPS  ? state.PS  : 0;
+  const intSel = chkInt ? state.INTERESES : 0;
+
+  const totalCap = capVac+capBono+capUtil+capPS;
+  const totalGen = totalCap + intSel;
+
+  setText('r_TOTAL_CAPITAL', totalCap);
+  setText('r_TOTAL_INTERESES', intSel);
+  setText('r_TOTAL_GENERAL', totalGen);
+
+  actualizarReciboSeleccionado({
+    capVac,capBono,capUtil,capPS,interesesSel:intSel,totalGen,
+    showVac:chkVac,showBono:chkBono,showUtil:chkUtil,showPS:chkPS,showInt:chkInt
+  });
+}
+
+function actualizarReciboSeleccionado(o){
+  const patronoNombre=normalize(el('patrono_nombre')?.value);
+  const patronoTipo=(el('patrono_tipo_doc')?.value||'').toUpperCase();
+  const patronoDoc=(el('patrono_doc')?.value||'').toUpperCase();
+
+  const trabNombre=normalize(el('trabajador_nombre')?.value);
+  const trabTipo=(el('trabajador_tipo_doc')?.value||'V').toUpperCase();
+  const trabDoc=(el('trabajador_doc')?.value||'').toUpperCase();
+  const trabCargo=normalize(el('trabajador_cargo')?.value);
+
+  const fechaIng=el('fecha_ingreso')?.value || '---';
+  const fechaCal=el('fecha_calculo')?.value || '---';
+  const tiempo=el('tiempo_servicio_texto')?.textContent || '---';
+
+  if(el('reciboEmpresa')) el('reciboEmpresa').textContent = patronoNombre
+    ? `PATRONO: ${patronoNombre} - ${patronoTipo}-${patronoDoc}`
+    : 'PATRONO: ---';
+
+  if(el('reciboTrabajadorNombre')) el('reciboTrabajadorNombre').textContent = trabNombre || '---';
+  if(el('reciboTrabajadorDoc')) el('reciboTrabajadorDoc').textContent = `${trabTipo}-${trabDoc || '---'}`;
+  if(el('reciboTrabajadorCargo')) el('reciboTrabajadorCargo').textContent = trabCargo || '---';
+  if(el('reciboFechaIngreso')) el('reciboFechaIngreso').textContent = fechaIng;
+  if(el('reciboFechaCalculo')) el('reciboFechaCalculo').textContent = fechaCal;
+  if(el('reciboTiempoServicio')) el('reciboTiempoServicio').textContent = tiempo;
+
+  if(el('reciboCPV')) el('reciboCPV').textContent = formatMoney(o.capVac);
+  if(el('reciboCBV')) el('reciboCBV').textContent = formatMoney(o.capBono);
+  if(el('reciboUTIL')) el('reciboUTIL').textContent = formatMoney(o.capUtil);
+  if(el('reciboPS')) el('reciboPS').textContent = formatMoney(o.capPS);
+  if(el('reciboINTERESES')) el('reciboINTERESES').textContent = formatMoney(o.interesesSel);
+  if(el('reciboTOTAL')) el('reciboTOTAL').textContent = formatMoney(o.totalGen);
+
+  const rowVac=el('rowReciboCPV'), rowBono=el('rowReciboCBV'), rowUtil=el('rowReciboUTIL'),
+        rowPS=el('rowReciboPS'), rowInt=el('rowReciboINTERESES');
+
+  if(rowVac) rowVac.style.display = (o.showVac && o.capVac>0) ? 'flex' : 'none';
+  if(rowBono)rowBono.style.display= (o.showBono&& o.capBono>0)? 'flex' : 'none';
+  if(rowUtil)rowUtil.style.display= (o.showUtil&& o.capUtil>0)? 'flex' : 'none';
+  if(rowPS)  rowPS.style.display  = (o.showPS  && o.capPS>0)  ? 'flex' : 'none';
+  if(rowInt) rowInt.style.display = (o.showInt && o.interesesSel>0)? 'flex' : 'none';
+
+  if(el('firmaTrabajadorNombre')) el('firmaTrabajadorNombre').textContent = trabNombre || '---';
+  if(el('firmaTrabajadorDoc')) el('firmaTrabajadorDoc').textContent = `${trabTipo}-${trabDoc || '---'}`;
+}
+
+/* =========================
+   IMPRIMIR (NOMBRE EN PDF)
+========================= */
+function imprimirRecibo(){
+  const nombre = normalize(el('trabajador_nombre')?.value || 'RECIBO');
+  const doc = normalize(el('trabajador_doc')?.value || '');
+  document.title = `RECIBO_${nombre}_${doc}`;
+  window.print();
+}
+
+/* =========================
+   LIMPIAR
+========================= */
+function limpiarFormulario(){
+  ['patrono_nombre','patrono_doc','trabajador_nombre','trabajador_doc','trabajador_cargo'].forEach(id=>{ if(el(id)) el(id).value=''; });
+  if(el('S_NM')) el('S_NM').value='0';
+  if(el('DUA')) el('DUA').value='30';
+  if(el('SDI_FINAL')) el('SDI_FINAL').value='0';
+  if(el('capital_intereses')) el('capital_intereses').value='0';
+
+  if(el('fecha_ingreso')) el('fecha_ingreso').value='';
+  if(el('fecha_calculo')) el('fecha_calculo').value='';
+  if(el('tiempo_servicio_texto')) el('tiempo_servicio_texto').textContent='---';
+
+  if(el('DAA')) el('DAA').value='0';
+  if(el('DV')) el('DV').value='';
+  if(el('DBV')) el('DBV').value='';
+
+  for(let i=1;i<=12;i++){
+    if(el('salario_mes_'+i)) el('salario_mes_'+i).value='';
+    if(el('tasa_mes_'+i)) { el('tasa_mes_'+i).value=''; el('tasa_mes_'+i).dataset.userEdit=''; }
+  }
+
+  state.totalMonthsServicio=0; state.anosVAC=0; state.anosPS=0; state.y=0; state.m=0; state.d=0;
+  state.SDN=0; state.AUD=0; state.ABVD=0; state.SDI=0;
+  state.CPV=0; state.CBV=0; state.UTIL=0; state.PS=0; state.INTERESES=0;
+
+  setText('r_SDN',0); setText('r_AUD',0); setText('r_ABVD',0); setText('r_SDI',0);
+  setText('r_CPV',0); setText('r_CBV',0); setText('r_UTIL',0);
+  setText('r_total_garantia',0); setText('r_total_retroactivo',0); setText('r_PS',0); setText('r_INTERESES',0);
+  setText('r_TOTAL_CAPITAL',0); setText('r_TOTAL_INTERESES',0); setText('r_TOTAL_GENERAL',0);
+
+  if(el('r_trimestres')) el('r_trimestres').textContent='0';
+  if(el('r_dias_trimestres')) el('r_dias_trimestres').textContent='0';
+  if(el('r_dias_adicionales')) el('r_dias_adicionales').textContent='0';
+
+  calcularTotalesSeleccionados();
+}
+
+/* =========================
+   INIT
+========================= */
+document.addEventListener('DOMContentLoaded', ()=>{
+
+  // moneda en app
+  el('currencySelectApp')?.addEventListener('change', ()=> setCurrency(el('currencySelectApp').value));
+  el('currencySelect')?.addEventListener('change', ()=> setCurrency(el('currencySelect').value));
+
+  // intereses
+  cargarAniosBCV();
+  renderFilasIntereses();
+  prepararEdicionTasas();
+  actualizarPeriodoIntereses();
+  el('mes_inicio_interes')?.addEventListener('change', actualizarPeriodoIntereses);
+  el('interes_anio_inicio')?.addEventListener('change', actualizarPeriodoIntereses);
+
+  // fechas recalculo
+  el('fecha_ingreso')?.addEventListener('change', recalcularTiempoServicio);
+  el('fecha_calculo')?.addEventListener('change', recalcularTiempoServicio);
+
+  // MODAL SOLO CON ENTER en fecha_calculo
+  el('fecha_calculo')?.addEventListener('keydown', (e)=>{
+    if(e.key === 'Enter'){
+      e.preventDefault();
+      openVacModal();
+    }
+  });
+
+  // modal eventos
+  el('vacMode')?.addEventListener('change', ()=> applyVacMode(el('vacMode').value));
+  el('btnVacTodos')?.addEventListener('click', (e)=>{ e.preventDefault(); vacPeriods.forEach(p=>p.selected=true); renderVacModal(); });
+  el('btnVacNinguno')?.addEventListener('click', (e)=>{ e.preventDefault(); vacPeriods.forEach(p=>p.selected=false); renderVacModal(); });
+  el('btnVacCerrar')?.addEventListener('click', (e)=>{ e.preventDefault(); closeVacModal(); });
+  el('btnVacAplicar')?.addEventListener('click', (e)=>{ e.preventDefault(); aplicarVacModal(); });
+
+  // cerrar con ESC
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape' && el('modalVac').style.display === 'flex'){
+      closeVacModal();
+    }
+  });
+
+  // botones
+  el('btnCalcular')?.addEventListener('click', ()=>{ recalcularTiempoServicio(); calcularNomina(); });
+  el('btnCalcularIntereses')?.addEventListener('click', calcularInteresesSolo);
+  el('btnImprimir')?.addEventListener('click', imprimirRecibo);
+  el('btnLimpiar')?.addEventListener('click', limpiarFormulario);
+
+  // checks
+  ['chkVac','chkBono','chkUtil','chkPS','chkInt'].forEach(id=>{
+    el(id)?.addEventListener('change', calcularTotalesSeleccionados);
+  });
+
+  // iniciar valores en 0 ya con moneda
+  setCurrency('USD');
+  limpiarFormulario();
+});
+</script>
+<script src="./renderer-extra.js"></script>
+</body>
+</html>

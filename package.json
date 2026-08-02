@@ -1,0 +1,55 @@
+{
+  "name": "calculadora-lottt",
+  "version": "1.0.0",
+  "main": "app/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.0.0",
+    "call-bind-apply-helpers": "^1.0.2",
+    "exceljs": "^4.4.0",
+    "pdfkit": "^0.15.0"
+  },
+  "devDependencies": {
+    "electron": "^32.0.0",
+    "electron-builder": "^25.0.0"
+  },
+  "build": {
+    "directories": {
+      "app": "."
+    },
+    "asar": false,
+    "extraResources": [
+      {
+        "from": "node_modules/call-bind-apply-helpers",
+        "to": "app/node_modules/call-bind-apply-helpers"
+      },
+      {
+        "from": "node_modules/es-errors",
+        "to": "app/node_modules/es-errors"
+      },
+      {
+        "from": "node_modules/function-bind",
+        "to": "app/node_modules/function-bind"
+      }
+    ],
+    "appId": "com.tuempresa.calculadora.lottt",
+    "productName": "Calculadora LOTTT",
+    "files": [
+      "app/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": "nsis"
+    },
+    "mac": {
+      "target": "dmg"
+    },
+    "linux": {
+      "target": ["AppImage"]
+    }
+  }
+}

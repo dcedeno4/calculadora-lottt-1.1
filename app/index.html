@@ -1,0 +1,1741 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <meta name="theme-color" content="#2c3e50"/>
+  <meta name="description" content="Calculadora de Beneficios y Prestaciones LOTTT - Multiempresa v1.1. Cálculo de vacaciones, utilidades, prestaciones e intereses."/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="LOTTT Calc"/>
+  
+  <title>CALCULADORA DE BENEFICIOS Y PRESTACIONES - LOTTT</title>
+  
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="apple-touch-icon" href="icon-192.png"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --p:#4a7c59;--p2:#6b9b7c;--bg:#eef3ee;--card:#fff;--bd:#d7dfd7;
+      --shadow:0 10px 30px rgba(0,0,0,.15);
+    }
+    body{
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:linear-gradient(180deg,#dfe9df 0%,#eef3ee 40%,#dfe9df 100%);
+      min-height:100vh;padding:18px;color:#1f2933;
+    }
+    .wrap{max-width:1200px;margin:0 auto}
+    .header{
+      background:linear-gradient(135deg,var(--p),var(--p2));
+      color:#fff;border-radius:18px;padding:20px 20px 14px;box-shadow:var(--shadow);
+      margin-bottom:14px;
+    }
+    .header h1{font-size:1.15rem;letter-spacing:.8px;font-weight:900;display:flex;gap:10px;align-items:center}
+    .header p{margin-top:6px;opacity:.95;font-size:.9rem}
+    .header small{display:block;margin-top:8px;opacity:.9}
+
+    .card{
+      background:var(--card);border:1px solid rgba(0,0,0,.06);border-radius:16px;
+      box-shadow:0 2px 8px rgba(0,0,0,.06);padding:14px 16px;margin-bottom:12px;
+    }
+    .card h2{font-size:1rem;font-weight:900;margin-bottom:10px;display:flex;gap:10px;align-items:center}
+    .card h2 i{color:var(--p)}
+    .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 14px}
+    .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 14px}
+    @media (max-width:900px){.grid2,.grid3{grid-template-columns:1fr}}
+    label{font-size:.82rem;font-weight:700;color:#374151}
+    input,select,button{
+      width:100%;padding:9px 10px;border-radius:10px;border:1px solid #d1d5db;font-size:.92rem;
+    }
+    input:focus,select:focus{outline:none;border-color:var(--p);box-shadow:0 0 0 3px rgba(74,124,89,.15)}
+    .hint{font-size:.78rem;color:#6b7280;margin-top:4px;line-height:1.2}
+    .row{display:flex;gap:8px}
+    .row > *{flex:1}
+    .btnrow{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+    .btn{
+      width:auto;border:none;cursor:pointer;font-weight:900;padding:10px 14px;border-radius:12px;
+      display:inline-flex;align-items:center;gap:8px;
+    }
+    .btn.primary{background:linear-gradient(135deg,var(--p),var(--p2));color:#fff}
+    .btn.gray{background:#e5e7eb;color:#111827}
+    .btn.danger{background:#ef4444;color:#fff}
+    .results{
+      display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;
+    }
+    .box{background:#f4f7f4;border:1px solid var(--bd);border-radius:14px;padding:10px}
+    .box .k{font-size:.78rem;color:#4b5563}
+    .box .v{font-size:1rem;font-weight:900;margin-top:3px}
+    .checks{display:flex;flex-wrap:wrap;gap:14px;margin-top:6px}
+    .checks label{font-weight:800;font-size:.85rem;display:flex;gap:8px;align-items:center}
+    .checks input{width:auto}
+
+    /* LOGIN */
+    .overlay{
+      position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+      background:radial-gradient(circle at top,#4a7c59 0%,#1f2933 50%,#000 100%);
+      z-index:9999;padding:20px;
+    }
+    .login{
+      width:100%;max-width:560px;background:#fff;border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.35);
+      padding:22px 20px 16px;
+    }
+    .login h1{font-size:1.05rem;font-weight:1000;text-transform:uppercase}
+    .login p{margin-top:6px;color:#4b5563;font-size:.9rem}
+    .msg{min-height:18px;margin-top:8px;font-weight:800;font-size:.85rem}
+    .msg.err{color:#b91c1c}.msg.ok{color:#065f46}
+    .foot{margin-top:10px;font-size:.72rem;color:#6b7280;text-align:center}
+    .pill{
+      display:inline-flex;gap:8px;align-items:center;padding:8px 10px;border-radius:12px;background:#f3f4f6;border:1px solid #e5e7eb;
+      margin-top:10px;width:100%;
+    }
+    .pill select{border:none;background:transparent;padding:0;flex:1}
+    .pill strong{white-space:nowrap}
+
+    /* TABLE */
+    table{width:100%;border-collapse:collapse;font-size:.85rem;margin-top:10px}
+    th,td{border:1px solid #e5e7eb;padding:7px;text-align:right}
+    th:first-child,td:first-child{text-align:left}
+    td input{width:100%;padding:8px;border-radius:10px}
+
+    /* RECEIPT */
+    #receiptContainer{
+      background:#fff;border-radius:16px;border:1px solid rgba(0,0,0,.08);
+      box-shadow:0 2px 10px rgba(0,0,0,.08);
+      padding:16px 18px;margin-top:14px;
+    }
+    .rhead{text-align:center;margin-bottom:10px}
+    .rhead .t{font-size:1.05rem;font-weight:1000;text-transform:uppercase}
+    .rhead .s{font-size:.85rem;color:#374151;margin-top:4px}
+    .rsec{margin-top:10px;border-top:1px solid #e5e7eb;padding-top:8px}
+    .rgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 14px;font-size:.86rem}
+    @media (max-width:900px){.rgrid{grid-template-columns:1fr}}
+    .rline{display:flex;justify-content:space-between;padding:4px 0;font-size:.92rem}
+    .sig{margin-top:26px}
+    .sig .line{border-top:1px solid #111827;padding-top:4px;text-align:center;font-weight:800}
+
+    /* MODAL VACACIONES */
+    .modal{
+      position:fixed;inset:0;background:rgba(0,0,0,.55);
+      display:none;align-items:center;justify-content:center;z-index:10000;padding:18px;
+    }
+    .modal .boxm{
+      width:100%;max-width:620px;background:#fff;border-radius:18px;
+      box-shadow:0 20px 60px rgba(0,0,0,.35);padding:18px 16px;
+    }
+    .modal h3{font-size:1.05rem;font-weight:1000;margin-bottom:8px}
+    .modal .sub{font-size:.9rem;color:#4b5563;margin-bottom:12px}
+    .modal .btnrow{justify-content:flex-end}
+
+    /* PRINT */
+    @media print{
+      .no-print{display:none!important}
+      body{background:#fff;padding:0}
+      .wrap{max-width:none}
+      #receiptContainer{box-shadow:none;border:1px solid #000;border-radius:0;margin:0}
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="loginContainer" class="overlay">
+    <div class="login">
+      <h1>CALCULADORA DE BENEFICIOS Y PRESTACIONES - LOTTT</h1>
+      <p>Acceso exclusivo para clientes autorizados</p>
+
+      <div class="pill">
+        <strong><i class="fa-solid fa-coins"></i> Moneda:</strong>
+        <select id="currencySelect">
+          <option value="USD">USD</option>
+          <option value="BS">BS</option>
+        </select>
+      </div>
+
+      <div style="margin-top:12px">
+        <label for="loginEmail">Correo del cliente</label>
+        <input type="email" id="loginEmail" placeholder="CLIENTE@CORREO.COM" />
+
+        <div style="margin-top:10px">
+          <label for="loginCode">Clave de acceso</label>
+          <input type="password" id="loginCode" placeholder="INGRESE SU CLAVE" />
+        </div>
+
+        <div style="margin-top:12px">
+          <button id="btnLogin" class="btn primary" style="width:100%;justify-content:center">
+            <i class="fa-solid fa-unlock-keyhole"></i> ENTRAR
+          </button>
+          <div id="loginMessage" class="msg"></div>
+        </div>
+
+        <div class="foot">Derechos reservados y prohibida su comercialización por rastreo en línea.</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="vacModal" class="modal">
+    <div class="boxm">
+      <h3><i class="fa-solid fa-calendar-check"></i> Vacaciones y Bono: ¿qué deseas pagar?</h3>
+      <div class="sub">
+        Selecciona cómo calcular los días DV/DBV (aniversario). Puedes volver atrás y cambiar fechas.
+      </div>
+
+      <div class="grid2">
+        <div>
+          <label>Modo de cálculo</label>
+          <select id="vac_mode">
+            <option value="AUTO">Automático (por defecto)</option>
+            <option value="LAST_FRACTION">Solo último período (fracción desde el último aniversario)</option>
+            <option value="SELECT_PERIODS">Seleccionar períodos (años completos) y sumar</option>
+          </select>
+          <div class="hint">
+            Ej: 1 año y 3 meses ⇒ Año 2 (16 días) /12 * 3.
+          </div>
+        </div>
+
+        <div>
+          <label>
+            <input type="checkbox" id="vac_include_fraction" />
+            Incluir fracción del período actual (si hay meses) en “Seleccionar períodos”
+          </label>
+          <div class="hint">Si marcas años completos y además quieres sumar meses del año en curso.</div>
+        </div>
+      </div>
+
+      <div id="vac_periods_wrap" style="margin-top:12px; display:none;">
+        <label>Períodos disponibles (años completos causados)</label>
+        <div id="vac_periods_list" class="checks" style="margin-top:8px"></div>
+        <div class="hint">
+          Marca los años completos que quieres pagar (Año 1, Año 2, etc.). Si nunca se pagaron, marca todos.
+        </div>
+      </div>
+
+      <div class="btnrow">
+        <button class="btn gray" id="vac_back_btn" type="button"><i class="fa-solid fa-arrow-left"></i> ATRÁS</button>
+        <button class="btn primary" id="vac_apply_btn" type="button"><i class="fa-solid fa-check"></i> APLICAR</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="appContainer" class="wrap" style="display:none;">
+    <div class="header no-print">
+      <h1><i class="fa-solid fa-scale-balanced"></i> CALCULADORA DE BENEFICIOS Y PRESTACIONES - LOTTT</h1>
+      <p>Cálculo de vacaciones, bono, utilidades, prestaciones e intereses (Venezuela).</p>
+      <p style="margin-top:5px;"><strong><i class="fa-solid fa-building"></i> MULTIEMPRESA - Versión 1.1 © 2026</strong></p>
+      <small>Derechos reservados y prohibida su comercialización por rastreo en línea.</small>
+      <div class="btnrow" style="justify-content:flex-end;margin-top:10px">
+        <button class="btn danger" id="btnSalir" type="button"><i class="fa-solid fa-right-from-bracket"></i> SALIR</button>
+      </div>
+    </div>
+
+    <div class="card no-print">
+      <h2><i class="fa-solid fa-coins"></i> Moneda</h2>
+      <div class="grid2">
+        <div>
+          <label>Moneda activa</label>
+          <select id="currencySelectApp">
+            <option value="USD">USD</option>
+            <option value="BS">BS</option>
+          </select>
+          <div class="hint">Al cambiarla, se actualiza toda la plantilla y el recibo.</div>
+        </div>
+        <div>
+          <label>Nota</label>
+          <div class="hint">La moneda solo cambia el símbolo/etiqueta (no convierte automáticamente tasas de cambio).</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card no-print">
+      <h2 style="cursor:pointer;user-select:none" id="toggleDbSection">
+        <i class="fa-solid fa-database"></i> Base de datos local 
+        <i class="fa-solid fa-chevron-down" id="iconDbToggle" style="float:right;font-size:0.8em"></i>
+      </h2>
+      <div id="dbSectionContent" style="display:none">
+        <div class="grid2">
+          <div>
+            <label>Buscar trabajador (nombre o documento)</label>
+            <input id="dbSearch" type="text" placeholder="Ej: V-12345678 o NOMBRE" />
+            <div class="btnrow">
+              <button class="btn gray" id="btnDbBuscar" type="button"><i class="fa-solid fa-magnifying-glass"></i> Buscar</button>
+            </div>
+          </div>
+          <div>
+            <label>Acciones</label>
+            <div class="btnrow">
+              <button class="btn primary" id="btnGuardarTodo" type="button"><i class="fa-solid fa-floppy-disk"></i> GUARDAR EN BD</button>
+              <button class="btn gray" id="btnHistRefresh" type="button"><i class="fa-solid fa-clock-rotate-left"></i> ACTUALIZAR HISTORIAL</button>
+              <button class="btn gray" id="btnExportReciboPdf" type="button"><i class="fa-solid fa-file-pdf"></i> EXPORTAR RECIBO PDF</button>
+              <button class="btn gray" id="btnExportExcelCalculo" type="button"><i class="fa-solid fa-file-excel"></i> EXPORTAR EXCEL</button>
+            </div>
+            <div class="hint">Para exportar Excel debes abrir un cálculo desde el historial (Ver/Rehacer).</div>
+          </div>
+        </div>
+
+        <div style="margin-top:10px">
+        <label>Historial (del trabajador seleccionado)</label>
+        <table>
+          <thead>
+            <tr>
+              <th style="text-align:left">ID</th>
+              <th style="text-align:left">Registro</th>
+              <th style="text-align:left">Ingreso</th>
+              <th style="text-align:left">Cálculo</th>
+              <th style="text-align:left">Moneda</th>
+              <th>Total</th>
+              <th style="text-align:center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyHistorial"></tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Selector de Empresa -->
+    <div class="card no-print" id="cardSeleccionEmpresa">
+      <h2 style="cursor:pointer;user-select:none" onclick="toggleSeccion('listaEmpresas')">
+        <i class="fa-solid fa-building"></i> 1. Seleccionar Empresa / Patrono
+        <i class="fa-solid fa-chevron-down" id="iconListaEmpresas" style="float:right;font-size:0.8em"></i>
+      </h2>
+      
+      <div id="listaEmpresas" style="display:none">
+        <div style="margin-bottom:10px">
+          <label>Buscar empresa (nombre o documento)</label>
+          <input id="empresaSearch" type="text" placeholder="Ej: J-12345678 o NOMBRE EMPRESA" />
+        </div>
+        
+        <table>
+          <thead>
+            <tr>
+              <th style="text-align:left">Documento</th>
+              <th style="text-align:left">Nombre / Razón Social</th>
+              <th style="text-align:center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyEmpresas"></tbody>
+        </table>
+        
+        <div class="hint" style="margin-top:10px">
+          <strong>Empresa seleccionada:</strong> <span id="empresaSeleccionadaNombre">Ninguna</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Selector de Trabajador -->
+    <div class="card no-print" id="cardSeleccionTrabajador" style="display:none">
+      <h2 style="cursor:pointer;user-select:none" onclick="toggleSeccion('listaTrabajadores')">
+        <i class="fa-solid fa-user-tie"></i> 2. Seleccionar Trabajador
+        <i class="fa-solid fa-chevron-down" id="iconListaTrabajadores" style="float:right;font-size:0.8em"></i>
+      </h2>
+      
+      <div id="listaTrabajadores" style="display:none">
+        <div style="margin-bottom:10px">
+          <label>Buscar trabajador (nombre o documento)</label>
+          <input id="dbSearch" type="text" placeholder="Ej: V-12345678 o NOMBRE" />
+        </div>
+        
+        <table>
+          <thead>
+            <tr>
+              <th style="text-align:left">Documento</th>
+              <th style="text-align:left">Nombre</th>
+              <th style="text-align:left">Cargo</th>
+              <th style="text-align:left">Ingreso</th>
+              <th style="text-align:center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyTrabajadores"></tbody>
+        </table>
+        
+        <div class="btnrow" style="margin-top:15px">
+          <button class="btn primary" id="btnNuevoTrabajador" type="button">
+            <i class="fa-solid fa-user-plus"></i> AGREGAR NUEVO TRABAJADOR
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulario para nuevo trabajador -->
+    <div class="card no-print" id="cardNuevoTrabajador" style="display:none">
+      <h2><i class="fa-solid fa-user-plus"></i> Agregar Nuevo Trabajador</h2>
+      
+      <div class="grid3">
+        <div>
+          <label>Nombre y apellido del Trabajador</label>
+          <input id="nuevo_trabajador_nombre" class="to-upper" type="text"/>
+        </div>
+        <div>
+          <label>Cédula / RIF del Trabajador</label>
+          <div class="row">
+            <select id="nuevo_trabajador_tipo_doc" style="max-width:92px">
+              <option value="V">V</option><option value="E">E</option><option value="J">J</option>
+            </select>
+            <input id="nuevo_trabajador_doc" class="to-upper" type="text" placeholder="00000000"/>
+          </div>
+        </div>
+        <div>
+          <label>Cargo</label>
+          <input id="nuevo_trabajador_cargo" class="to-upper" type="text"/>
+        </div>
+      </div>
+      
+      <div class="grid3" style="margin-top:10px">
+        <div>
+          <label>Fecha de ingreso</label>
+          <input id="nuevo_trabajador_fecha_ingreso" type="date"/>
+        </div>
+        <div>
+          <label>Salario mensual</label>
+          <input id="nuevo_trabajador_salario" type="number" step="0.01" placeholder="0.00"/>
+        </div>
+        <div style="display:flex;align-items:flex-end">
+          <div class="btnrow" style="width:100%">
+            <button class="btn primary" id="btnGuardarNuevoTrabajador" type="button">
+              <i class="fa-solid fa-floppy-disk"></i> GUARDAR TRABAJADOR
+            </button>
+            <button class="btn gray" id="btnCancelarNuevoTrabajador" type="button">
+              <i class="fa-solid fa-times"></i> CANCELAR
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="hint" style="margin-top:10px">
+        <strong>Opciones:</strong><br>
+        • <strong>GUARDAR TRABAJADOR:</strong> Guarda el trabajador en la base de datos y vuelve a la lista.<br>
+        • <strong>GUARDAR Y CALCULAR:</strong> Guarda el trabajador y continúa directamente al cálculo.
+      </div>
+      
+      <div class="btnrow" style="margin-top:10px">
+        <button class="btn success" id="btnGuardarYCalcular" type="button">
+          <i class="fa-solid fa-calculator"></i> GUARDAR Y CONTINUAR AL CÁLCULO
+        </button>
+      </div>
+    </div>
+
+    <!-- Campos ocultos para trabajador -->
+    <input id="trabajador_nombre" type="hidden"/>
+    <input id="trabajador_doc" type="hidden"/>
+    <input id="trabajador_tipo_doc" type="hidden" value="V"/>
+    <input id="trabajador_cargo" type="hidden"/>
+
+    <!-- Datos seleccionados (ocultos inicialmente) -->
+    <div class="card no-print" id="cardDatosSeleccionados" style="display:none">
+      <h2><i class="fa-solid fa-check-circle"></i> Empresa y Trabajador Seleccionados</h2>
+      
+      <div class="grid2">
+        <div>
+          <label>Empresa / Patrono</label>
+          <input id="patrono_nombre" class="to-upper" type="text" readonly style="background:#f5f5f5"/>
+        </div>
+        <div>
+          <label>RIF / Documento</label>
+          <div class="row">
+            <select id="patrono_tipo_doc" style="max-width:92px" disabled>
+              <option value="J">J</option><option value="G">G</option><option value="V">V</option><option value="E">E</option>
+            </select>
+            <input id="patrono_doc" class="to-upper" type="text" readonly style="background:#f5f5f5"/>
+          </div>
+        </div>
+      </div>
+      
+      <div class="grid2" style="margin-top:10px">
+        <div>
+          <label>Trabajador</label>
+          <input id="trabajador_nombre_display" class="to-upper" type="text" readonly style="background:#f5f5f5"/>
+        </div>
+        <div>
+          <label>Cédula / Cargo</label>
+          <input id="trabajador_info_display" class="to-upper" type="text" readonly style="background:#f5f5f5"/>
+        </div>
+      </div>
+      
+      <div class="btnrow" style="margin-top:10px">
+        <button class="btn gray" id="btnCambiarSeleccion" type="button">
+          <i class="fa-solid fa-rotate"></i> CAMBIAR EMPRESA/TRABAJADOR
+        </button>
+      </div>
+    </div>
+
+    <!-- Formulario de cálculo -->
+    <div class="card no-print" id="cardFormularioCalculo" style="display:none">
+      <h2><i class="fa-solid fa-calendar-days"></i> Fechas del Cálculo</h2>
+
+      <div class="grid3">
+        <div>
+          <label>Fecha de ingreso (del trabajador)</label>
+          <input id="fecha_ingreso" type="date"/>
+          <div class="hint">Fecha real de ingreso del trabajador.</div>
+        </div>
+        <div>
+          <label>Fecha desde (inicio del cálculo)</label>
+          <input id="fecha_desde" type="date"/>
+          <div class="hint">Fecha desde la cual se hará el cálculo.</div>
+        </div>
+        <div>
+          <label>Fecha hasta (corte del cálculo)</label>
+          <input id="fecha_calculo" type="date"/>
+          <div class="hint">Fecha hasta la cual se hará el cálculo.</div>
+        </div>
+      </div>
+
+      <div class="grid3" style="margin-top:10px">
+        <div>
+          <label>Tiempo de servicio</label>
+          <div id="tiempo_servicio_texto" class="hint">---</div>
+          <input id="anios_servicio" type="hidden" />
+        </div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+
+    <div class="card no-print">
+      <h2><i class="fa-solid fa-money-check-dollar"></i> Datos salariales y parámetros</h2>
+
+      <div class="grid3">
+        <div>
+          <label>Salario normal mensual (S_NM)</label>
+          <input id="S_NM" type="number" min="0" step="0.01" value="0"/>
+          <div class="hint">Base fija mensual.</div>
+        </div>
+        <div>
+          <label>Días de utilidades anuales (DUA)</label>
+          <input id="DUA" type="number" min="30" step="1" value="30"/>
+          <div class="hint">Mínimo legal 30 días (modificable).</div>
+        </div>
+        <div>
+          <label>Último salario diario integral (SDI_FINAL)</label>
+          <input id="SDI_FINAL" type="number" min="0" step="0.01" value="0"/>
+          <div class="hint">Se trae del SDI automáticamente (si está en 0). Puede ajustarse.</div>
+        </div>
+      </div>
+
+      <div class="grid3" style="margin-top:10px">
+        <div>
+          <label>Días adicionales por antigüedad (DAA)</label>
+          <input id="DAA" type="number" value="0" readonly />
+          <div class="hint">Vacaciones/Bono: 1 día por año desde el 2do (tope 15).</div>
+        </div>
+        <div>
+          <label>Días de vacaciones a pagar (DV)</label>
+          <input id="DV" type="number" step="0.01" value=""/>
+          <div class="hint">Se define desde la ventana emergente (editable por patrono).</div>
+        </div>
+        <div>
+          <label>Días de bono vacacional a pagar (DBV)</label>
+          <input id="DBV" type="number" step="0.01" value=""/>
+          <div class="hint">Se define desde la ventana emergente (editable por patrono).</div>
+        </div>
+      </div>
+
+      <div class="btnrow">
+        <button class="btn primary" id="btnCalcular" type="button"><i class="fa-solid fa-calculator"></i> CALCULAR</button>
+        <button class="btn gray" id="btnLimpiar" type="button"><i class="fa-solid fa-eraser"></i> LIMPIAR</button>
+      </div>
+    </div>
+
+    <div class="card no-print">
+      <h2><i class="fa-solid fa-coins"></i> Salario base y diario</h2>
+      <div class="results">
+        <div class="box"><div class="k">Salario diario normal (SDN)</div><div id="r_SDN" class="v">USD 0,00</div></div>
+        <div class="box"><div class="k">Alícuota diaria utilidades (AUD)</div><div id="r_AUD" class="v">USD 0,00</div></div>
+        <div class="box"><div class="k">Alícuota diaria bono vacacional (ABVD)</div><div id="r_ABVD" class="v">USD 0,00</div></div>
+        <div class="box"><div class="k">Salario diario integral (SDI)</div><div id="r_SDI" class="v">USD 0,00</div></div>
+      </div>
+    </div>
+
+    <div class="card no-print">
+      <h2><i class="fa-solid fa-gift"></i> Beneficios</h2>
+      <div class="results">
+        <div class="box"><div class="k">Vacaciones (CPV)</div><div id="r_CPV" class="v">USD 0,00</div></div>
+        <div class="box"><div class="k">Bono vacacional (CBV)</div><div id="r_CBV" class="v">USD 0,00</div></div>
+        <div class="box"><div class="k">Utilidades</div><div id="r_UTIL" class="v">USD 0,00</div></div>
+      </div>
+    </div>
+
+    <div class="card no-print">
+      <h2><i class="fa-solid fa-scale-balanced"></i> Prestaciones sociales - Art. 142 LOTTT</h2>
+      <div class="results">
+        <div class="box"><div class="k">Trimestres laborados</div><div id="r_trimestres" class="v">0</div></div>
+        <div class="box"><div class="k">Días trimestres + fracción</div><div id="r_dias_trimestres" class="v">0</div></div>
+        <div class="box"><div class="k">Días adicionales PS</div><div id="r_dias_adicionales" class="v">0</div></div>
+        <div class="box"><div class="k">Total garantía (A+B)</div><div id="r_total_garantia" class="v">USD 0,00</div></div>
+        <div class="box"><div class="k">Total retroactivo (C)</div><div id="r_total_retroactivo" class="v">USD 0,00</div></div>
+        <div class="box"><div class="k">PS final (mayor)</div><div id="r_PS" class="v">USD 0,00</div></div>
+      </div>
+    </div>
+
+    <div class="card no-print">
+      <h2><i class="fa-solid fa-percent"></i> Intereses sobre prestaciones - Art. 143 LOTTT</h2>
+
+      <div class="grid2">
+        <div>
+          <label>Modo de cálculo de intereses</label>
+          <select id="modo_calculo_intereses">
+            <option value="AUTOMATICO">Automático (SDI actual + promedio tasas BCV)</option>
+            <option value="MANUAL">Manual (ingresar salarios mensuales)</option>
+            <option value="TRIMESTRAL">Trimestral detallado (más preciso)</option>
+          </select>
+          <div class="hint">Selecciona cómo deseas calcular los intereses sobre prestaciones.</div>
+        </div>
+        <div>
+          <label>Capital inicial (opcional)</label>
+          <input id="capital_intereses" type="number" step="0.01" value="0"/>
+          <div class="hint">Saldo de prestaciones acumulado al inicio del período.</div>
+        </div>
+      </div>
+
+      <div class="grid2" style="margin-top:10px">
+        <div>
+          <label>Fecha inicio del período (12 meses)</label>
+          <div class="row">
+            <select id="mes_inicio_interes">
+              <option value="1">ENERO</option><option value="2">FEBRERO</option><option value="3">MARZO</option>
+              <option value="4">ABRIL</option><option value="5">MAYO</option><option value="6">JUNIO</option>
+              <option value="7">JULIO</option><option value="8">AGOSTO</option><option value="9">SEPTIEMBRE</option>
+              <option value="10">OCTUBRE</option><option value="11">NOVIEMBRE</option><option value="12">DICIEMBRE</option>
+            </select>
+            <select id="interes_anio_inicio"></select>
+          </div>
+          <div id="textoPeriodoIntereses" class="hint"></div>
+        </div>
+        <div>
+          <label>Días por trimestre (para cálculo trimestral)</label>
+          <input id="dias_prestacion_trimestral" type="number" value="15" step="1"/>
+          <div class="hint">Días de prestaciones que se acumulan cada trimestre (por defecto 15).</div>
+        </div>
+      </div>
+
+      <div id="hint_intereses" class="hint" style="margin-bottom:10px">
+        <strong>Modo Automático:</strong> Se usa el SDI actual y se acumulan 5 días trimestrales automáticamente.
+      </div>
+      
+      <div id="seccion_tabla_intereses" style="display:none">
+        <h3 style="cursor:pointer;user-select:none;margin-top:15px" id="toggleTablaIntereses">
+          <i class="fa-solid fa-table"></i> Ingresar salarios y tasas mensuales
+          <i class="fa-solid fa-chevron-down" id="iconTablaIntereses" style="float:right;font-size:0.8em"></i>
+        </h3>
+        <div id="contenidoTablaIntereses" style="display:none">
+          <table id="tabla_intereses">
+            <thead>
+              <tr>
+                <th>Mes / Año</th>
+                <th id="th_salario" style="display:none">Salario mensual</th>
+                <th>Tasa BCV % anual</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyIntereses"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="results" style="margin-top:10px">
+        <div class="box"><div class="k">Total intereses</div><div id="r_INTERESES" class="v">USD 0,00</div></div>
+      </div>
+
+      <div class="btnrow">
+        <button class="btn primary" id="btnCalcularIntereses" type="button"><i class="fa-solid fa-percent"></i> CALCULAR INTERESES</button>
+      </div>
+    </div>
+
+    <div class="card no-print">
+      <h2><i class="fa-solid fa-file-invoice-dollar"></i> Totales y recibo</h2>
+
+      <label>Conceptos a pagar en este recibo</label>
+      <div class="checks">
+        <label><input type="checkbox" id="chkVac" checked/> Vacaciones</label>
+        <label><input type="checkbox" id="chkBono" checked/> Bono vacacional</label>
+        <label><input type="checkbox" id="chkUtil" checked/> Utilidades</label>
+        <label><input type="checkbox" id="chkPS" checked/> Prestaciones (PS)</label>
+        <label><input type="checkbox" id="chkInt" checked/> Intereses PS</label>
+      </div>
+
+      <div class="results" style="margin-top:10px">
+        <div class="box"><div class="k">Total capital (seleccionado)</div><div id="r_TOTAL_CAPITAL" class="v">USD 0,00</div></div>
+        <div class="box"><div class="k">Intereses (seleccionado)</div><div id="r_TOTAL_INTERESES" class="v">USD 0,00</div></div>
+        <div class="box"><div class="k"><strong>TOTAL GENERAL</strong></div><div id="r_TOTAL_GENERAL" class="v">USD 0,00</div></div>
+      </div>
+
+      <div class="btnrow">
+        <button class="btn primary" id="btnImprimir" type="button"><i class="fa-solid fa-print"></i> IMPRIMIR RECIBO</button>
+      </div>
+    </div>
+
+    <div id="receiptContainer">
+      <div class="rhead">
+        <div class="t">RECIBO DE PAGO</div>
+        <div class="s" id="reciboEmpresa">PATRONO: ---</div>
+      </div>
+
+      <div class="rsec">
+        <div style="font-weight:1000;margin-bottom:6px">Datos del trabajador</div>
+        <div class="rgrid">
+          <div><strong>Nombre:</strong> <span id="reciboTrabajadorNombre">---</span></div>
+          <div><strong>Cédula/RIF:</strong> <span id="reciboTrabajadorDoc">---</span></div>
+          <div><strong>Cargo:</strong> <span id="reciboTrabajadorCargo">---</span></div>
+          <div><strong>Tiempo de servicio:</strong> <span id="reciboTiempoServicio">---</span></div>
+          <div><strong>Fecha de ingreso:</strong> <span id="reciboFechaIngreso">---</span></div>
+          <div><strong>Fecha del recibo:</strong> <span id="reciboFechaRecibo">---</span></div>
+        </div>
+      </div>
+
+      <div class="rsec">
+        <div style="font-weight:1000;margin-bottom:6px">Conceptos pagados</div>
+
+        <div class="rline" id="rowReciboCPV"><span>Vacaciones</span><strong id="reciboCPV">USD 0,00</strong></div>
+        <div class="rline" id="rowReciboCBV"><span>Bono vacacional</span><strong id="reciboCBV">USD 0,00</strong></div>
+        <div class="rline" id="rowReciboUTIL"><span>Utilidades</span><strong id="reciboUTIL">USD 0,00</strong></div>
+        <div class="rline" id="rowReciboPS"><span>Prestaciones sociales (Art. 142)</span><strong id="reciboPS">USD 0,00</strong></div>
+        <div class="rline" id="rowReciboINTERESES"><span>Intereses sobre PS (Art. 143)</span><strong id="reciboINTERESES">USD 0,00</strong></div>
+
+        <div class="rline" style="border-top:1px solid #111827;margin-top:6px;padding-top:6px">
+          <span><strong>TOTAL GENERAL</strong></span>
+          <strong id="reciboTOTAL">USD 0,00</strong>
+        </div>
+      </div>
+
+      <div class="sig">
+        <div class="line">TRABAJADOR: <span id="firmaTrabajadorNombre">---</span> - <span id="firmaTrabajadorDoc">---</span></div>
+      </div>
+    </div>
+
+  </div>
+
+<script>
+/* =========================
+   LICENCIAS + ESTADO
+========================= */
+const LICENSES = [
+  { email: 'CONTADORA2504@GMAIL.COM', code: 'PROD-2025-PRES-6481' },
+  { email: 'CLIENTE@CORREO.COM', code: 'ABC-999' }
+];
+
+const state = {
+  currency: 'USD',
+  totalMonthsServicio: 0,
+  anosVAC: 0,
+  anosPS: 0,
+  monthsAfterAnniversary: 0,
+  CPV:0, CBV:0, UTIL:0, PS:0, INTERESES:0,
+  vac: {
+    mode: 'AUTO',
+    selectedYears: new Set(),
+    includeFraction: false,
+    monthsFraction: 0,
+    currentYearNumber: 1
+  }
+};
+
+const MESES_ES = ['ENERO','FEBRERO','MARZO','ABRIL','MAYO','JUNIO','JULIO','AGOSTO','SEPTIEMBRE','OCTUBRE','NOVIEMBRE','DICIEMBRE'];
+
+function el(id){ return document.getElementById(id); }
+function normalize(s){ return (s||'').trim().toUpperCase(); }
+function todayISO(){
+  const d = new Date();
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth()+1).padStart(2,'0');
+  const dd = String(d.getDate()).padStart(2,'0');
+  return `${yyyy}-${mm}-${dd}`;
+}
+
+function validarLicencia(email, code){
+  const e = normalize(email), c = normalize(code);
+  return LICENSES.some(x => x.email === e && x.code === c);
+}
+
+function setCurrency(curr){
+  state.currency = curr === 'BS' ? 'BS' : 'USD';
+  refrescarTodosLosMontos();
+  calcularTotalesSeleccionados();
+}
+
+function mostrarApp(){
+  el('loginContainer').style.display='none';
+  el('appContainer').style.display='block';
+}
+
+function manejarLogin(){
+  const msg = el('loginMessage');
+  const email = el('loginEmail').value;
+  const code  = el('loginCode').value;
+
+  setCurrency(el('currencySelect').value);
+
+  if(!email || !code){
+    msg.textContent = 'Por favor ingrese correo y clave.';
+    msg.className = 'msg err';
+    return;
+  }
+  if(validarLicencia(email, code)){
+    msg.textContent = 'Acceso concedido.';
+    msg.className = 'msg ok';
+    setTimeout(()=>{
+      mostrarApp();
+      if(el('currencySelectApp')) el('currencySelectApp').value = state.currency;
+      if(el('reciboFechaRecibo')) el('reciboFechaRecibo').textContent = todayISO();
+      calcularTotalesSeleccionados();
+    }, 200);
+  } else {
+    msg.textContent = 'Correo o clave incorrectos.';
+    msg.className = 'msg err';
+  }
+}
+
+function parseNumber(id){
+  const x = el(id);
+  if(!x) return 0;
+  const raw = String(x.value ?? '').trim();
+  if(!raw) return 0;
+  const v = parseFloat(raw.replace(',', '.'));
+  return isNaN(v) ? 0 : v;
+}
+function moneyPrefix(){ return (state.currency === 'BS') ? 'BS ' : 'USD '; }
+function formatMoney(v){
+  const n = Number(v||0);
+  const f = new Intl.NumberFormat('es-VE',{minimumFractionDigits:2,maximumFractionDigits:2}).format(n);
+  return moneyPrefix()+f;
+}
+function setText(id, v){
+  const x = el(id);
+  if(x) x.textContent = formatMoney(v||0);
+}
+
+const BCV_RATES = {
+  2026: {1:47.34,2:47.10,3:47.30,4:47.46,5:47.52,6:47.52,7:47.52,8:47.52,9:47.52,10:47.52,11:47.52,12:47.52},
+  2025: {1:47.69,2:47.69,3:47.68,4:47.65,5:47.61,6:47.64,7:47.61,8:47.53,9:47.47,10:47.33,11:47.17,12:47.30},
+  2024: {1:46.92,2:47.30,3:47.49,4:47.49,5:47.60,6:47.63,7:47.60,8:47.63,9:47.62,10:47.65,11:47.65,12:47.56},
+  2021: {1:31.80,2:40.67,3:47.34,4:47.36,5:46.66,6:46.73,7:46.13,8:45.03,9:44.48,10:46.43,11:44.35,12:44.48},
+  2020: {1:31.06,2:36.05,3:39.32,4:39.00,5:36.66,6:34.09,7:31.49,8:31.26,9:31.38,10:31.46,11:31.08,12:31.18},
+  2019: {1:18.45,2:28.14,3:27.57,4:26.15,5:27.31,6:26.41,7:25.93,8:27.92,9:27.33,10:25.97,11:30.53,12:29.92},
+  2018: {1:17.85,2:18.55,3:18.10,4:18.26,5:17.80,6:17.85,7:17.61,8:18.03,9:18.38,10:17.92,11:18.08,12:18.42},
+  2017: {1:17.76,2:18.33,3:18.29,4:18.08,5:18.11,6:18.27,7:18.00,8:18.09,9:18.09,10:18.05,11:18.07,12:18.14},
+  2016: {1:17.86,2:17.05,3:17.93,4:17.88,5:18.36,6:18.12,7:18.07,8:18.54,9:18.25,10:18.69,11:18.60,12:18.71},
+  2015: {1:16.76,2:16.65,3:16.71,4:17.22,5:16.99,6:17.10,7:17.38,8:17.49,9:17.86,10:18.13,11:18.16,12:18.05},
+  2014: {1:15.12,2:15.54,3:15.05,4:15.44,5:15.54,6:15.56,7:15.86,8:16.23,9:16.16,10:16.65,11:16.96,12:16.85},
+  2013: {1:14.66,2:15.47,3:14.89,4:15.09,5:15.07,6:14.88,7:14.97,8:15.53,9:15.13,10:14.99,11:14.93,12:15.15},
+  2012: {1:15.70,2:15.18,3:14.97,4:15.41,5:15.63,6:15.38,7:15.35,8:15.57,9:15.65,10:15.50,11:15.29,12:15.06},
+  2011: {1:16.29,2:16.37,3:16.00,4:16.37,5:16.64,6:16.09,7:16.52,8:15.94,9:16.00,10:16.39,11:15.43,12:15.03},
+  2010: {1:16.74,2:16.65,3:16.44,4:16.23,5:16.40,6:16.10,7:16.34,8:16.28,9:16.10,10:16.38,11:16.25,12:16.45},
+  2009: {1:19.76,2:19.98,3:19.74,4:18.77,5:18.77,6:17.56,7:17.26,8:17.04,9:16.58,10:17.62,11:17.05,12:16.97},
+  2008: {1:18.53,2:17.56,3:18.17,4:18.35,5:20.85,6:20.09,7:20.30,8:20.09,9:19.68,10:19.82,11:20.24,12:19.65},
+  2007: {1:12.92,2:12.82,3:12.53,4:13.05,5:13.03,6:12.53,7:13.51,8:13.86,9:13.79,10:14.00,11:15.75,12:16.44},
+  2006: {1:12.71,2:12.76,3:12.31,4:12.11,5:12.15,6:11.94,7:12.29,8:12.43,9:12.32,10:12.46,11:12.63,12:12.64},
+  2005: {1:14.93,2:14.21,3:14.44,4:13.96,5:14.02,6:13.47,7:13.53,8:13.33,9:12.71,10:13.18,11:12.95,12:12.79},
+  2004: {1:15.09,2:14.46,3:15.20,4:15.22,5:15.40,6:14.92,7:14.45,8:15.01,9:15.20,10:15.02,11:14.51,12:15.25},
+  2003: {1:31.63,2:29.12,3:25.05,4:24.52,5:20.12,6:18.33,7:18.49,8:18.74,9:19.99,10:16.87,11:17.67,12:16.83},
+  2002: {1:28.91,2:39.10,3:50.10,4:43.59,5:36.20,6:31.64,7:29.90,8:26.92,9:26.92,10:29.44,11:30.47,12:29.99},
+  2001: {1:17.34,2:16.17,3:16.17,4:16.05,5:16.56,6:18.50,7:18.54,8:19.69,9:27.62,10:25.59,11:21.51,12:23.57},
+  2000: {1:23.76,2:22.10,3:19.78,4:20.49,5:19.04,6:21.31,7:18.81,8:19.28,9:18.84,10:17.43,11:17.70,12:17.76},
+  1999: {1:36.73,2:35.07,3:30.55,4:27.26,5:24.80,6:24.84,7:23.00,8:21.03,9:21.12,10:21.74,11:22.95,12:22.69},
+  1998: {1:21.51,2:29.46,3:30.84,4:32.27,5:38.18,6:38.79,7:53.25,8:51.28,9:63.84,10:47.07,11:42.71,12:39.72}
+};
+
+function cargarAniosBCV(){
+  const sel = el('interes_anio_inicio');
+  if(!sel) return;
+  const years = Object.keys(BCV_RATES).map(x=>parseInt(x,10)).sort((a,b)=>b-a);
+  sel.innerHTML = '';
+  years.forEach(y=>{
+    const opt=document.createElement('option');
+    opt.value=y; opt.textContent=y;
+    sel.appendChild(opt);
+  });
+  if(years.length) sel.value = years[0];
+}
+
+function renderFilasIntereses(){
+  const tb = el('tbodyIntereses');
+  if(!tb) return;
+  const modo = el('modo_calculo_intereses')?.value || 'AUTOMATICO';
+  const mostrarSalario = (modo === 'MANUAL' || modo === 'TRIMESTRAL');
+  
+  tb.innerHTML = '';
+  for(let i=1;i<=12;i++){
+    const tr=document.createElement('tr');
+    if(mostrarSalario){
+      tr.innerHTML = `
+        <td><span class="mes-label" data-i="${i-1}">MES ${i}</span></td>
+        <td><input type="number" id="salario_mes_${i}" step="0.01" placeholder="Salario"></td>
+        <td><input type="number" id="tasa_mes_${i}" step="0.01" placeholder="Tasa"></td>
+      `;
+    } else {
+      tr.innerHTML = `
+        <td><span class="mes-label" data-i="${i-1}">MES ${i}</span></td>
+        <td><input type="number" id="tasa_mes_${i}" step="0.01" placeholder="Tasa BCV"></td>
+      `;
+    }
+    tb.appendChild(tr);
+  }
+  
+  // Mostrar u ocultar encabezado de salario
+  const thSalario = el('th_salario');
+  if(thSalario) thSalario.style.display = mostrarSalario ? '' : 'none';
+}
+
+function prepararEdicionTasas(){
+  for(let i=1;i<=12;i++){
+    const t=el('tasa_mes_'+i);
+    if(t){
+      t.addEventListener('input', ()=> t.dataset.userEdit='1');
+    }
+  }
+}
+
+function actualizarPeriodoIntereses(){
+  const selMes = el('mes_inicio_interes');
+  const selAnio = el('interes_anio_inicio');
+  const info = el('textoPeriodoIntereses');
+  if(!selMes || !selAnio) return;
+
+  const mesInicio = parseInt(selMes.value,10);
+  const anioInicio = parseInt(selAnio.value,10);
+  if(isNaN(mesInicio)||isNaN(anioInicio)) return;
+
+  const idxFin=(mesInicio-1)+11;
+  const anioFin = anioInicio + Math.floor(idxFin/12);
+  const mesFin = (idxFin%12)+1;
+
+  if(info){
+    info.textContent = `${MESES_ES[mesInicio-1]} ${anioInicio} a ${MESES_ES[mesFin-1]} ${anioFin} (12 meses)`;
+  }
+
+  for(let i=0;i<12;i++){
+    const idx=(mesInicio-1)+i;
+    const anio=anioInicio+Math.floor(idx/12);
+    const mes=(idx%12)+1;
+
+    const label=document.querySelector(`.mes-label[data-i="${i}"]`);
+    if(label) label.textContent = `${MESES_ES[mes-1]} ${anio}`;
+
+    const t=el('tasa_mes_'+(i+1));
+    if(t && !t.dataset.userEdit){
+      const tasa=BCV_RATES?.[anio]?.[mes];
+      if(tasa != null){
+        // Si hay tasa en la base de datos, usarla
+        t.value = Number(tasa).toFixed(2);
+      } else {
+        // Si NO hay tasa, dejar en blanco para ingreso manual
+        t.value = '';
+        t.placeholder = 'Ingresar manualmente';
+      }
+    }
+  }
+}
+
+function getVacAnnualDaysForYearNumber(yearNumber){
+  const adicional = Math.min(Math.max(0, yearNumber - 1), 15);
+  return Math.min(15 + adicional, 30);
+}
+
+function buildVacPeriodsUI(){
+  const wrap = el('vac_periods_wrap');
+  const list = el('vac_periods_list');
+  if(!wrap || !list) return;
+
+  list.innerHTML = '';
+  state.vac.selectedYears = new Set();
+
+  const total = state.anosVAC;
+  if(total <= 0){
+    wrap.style.display = 'none';
+    return;
+  }
+
+  wrap.style.display = 'block';
+
+  for(let y=1; y<=total; y++){
+    const dias = getVacAnnualDaysForYearNumber(y);
+    const id = `vac_year_${y}`;
+    const lbl = document.createElement('label');
+    lbl.innerHTML = `<input type="checkbox" id="${id}"/> Año ${y} (${dias} días)`;
+    list.appendChild(lbl);
+
+    const cb = el(id);
+    cb?.addEventListener('change', ()=>{
+      if(cb.checked) state.vac.selectedYears.add(y);
+      else state.vac.selectedYears.delete(y);
+    });
+  }
+}
+
+function updateVacModeUI(){
+  const modeSel = el('vac_mode');
+  const wrap = el('vac_periods_wrap');
+  const inc = el('vac_include_fraction');
+  if(!modeSel || !wrap || !inc) return;
+
+  const mode = modeSel.value;
+  state.vac.mode = mode;
+
+  if(mode === 'SELECT_PERIODS'){
+    wrap.style.display = (state.anosVAC > 0) ? 'block' : 'none';
+    inc.disabled = false;
+  } else {
+    wrap.style.display = 'none';
+    inc.disabled = true;
+    inc.checked = false;
+    state.vac.includeFraction = false;
+  }
+}
+
+function openVacModal(){
+  const modal = el('vacModal');
+  if(!modal) return;
+  modal.style.display = 'flex';
+  buildVacPeriodsUI();
+  updateVacModeUI();
+}
+
+function closeVacModal(){
+  const modal = el('vacModal');
+  if(!modal) return;
+  modal.style.display = 'none';
+}
+
+function applyVacSelectionToDVDBV(){
+  const DV = el('DV');
+  const DBV = el('DBV');
+  if(!DV || !DBV) return;
+
+  const mode = el('vac_mode')?.value || 'AUTO';
+  const includeFraction = el('vac_include_fraction')?.checked || false;
+  state.vac.includeFraction = includeFraction;
+
+  const monthsFrac = state.vac.monthsFraction || 0;
+
+  let totalDays = 0;
+  if(mode === 'SELECT_PERIODS'){
+    state.vac.selectedYears.forEach(y => {
+      totalDays += getVacAnnualDaysForYearNumber(y);
+    });
+
+    if(includeFraction && monthsFrac > 0){
+      const currentYear = state.vac.currentYearNumber || (state.anosVAC + 1);
+      const annual = getVacAnnualDaysForYearNumber(currentYear);
+      totalDays += (annual / 12) * monthsFrac;
+    }
+  } else if(mode === 'LAST_FRACTION'){
+    const currentYear = state.vac.currentYearNumber || (state.anosVAC + 1);
+    const annual = getVacAnnualDaysForYearNumber(currentYear);
+    totalDays = (annual / 12) * monthsFrac;
+  } else {
+    // Modo AUTO: calcular días según años completos
+    const yearsComplete = state.anosVAC || 0;
+    if(yearsComplete >= 1){
+      totalDays = getVacAnnualDaysForYearNumber(yearsComplete);
+    } else if(monthsFrac > 0){
+      // Si no hay años completos pero hay meses, calcular proporcionalmente
+      const annual = getVacAnnualDaysForYearNumber(1);
+      totalDays = (annual / 12) * monthsFrac;
+    } else {
+      totalDays = 0;
+    }
+  }
+
+  const dv = Math.max(0, totalDays);
+  const dbv = Math.max(0, dv);
+
+  DV.value = dv.toFixed(2);
+  DBV.value = dbv.toFixed(2);
+}
+
+function parseDateInputLocal(value){
+  const raw = String(value || '').trim();
+  if(!raw) return null;
+
+  if(raw.includes('-')){
+    const [y, m, d] = raw.split('-').map(n => parseInt(n, 10));
+    if(!y || !m || !d) return null;
+    return new Date(y, m - 1, d);
+  }
+
+  if(raw.includes('/')){
+    const [d, m, y] = raw.split('/').map(n => parseInt(n, 10));
+    if(!y || !m || !d) return null;
+    return new Date(y, m - 1, d);
+  }
+
+  const d = new Date(raw);
+  return isNaN(d) ? null : d;
+}
+
+function calcularServicio(fechaIngreso, fechaCalculo){
+  const fi = parseDateInputLocal(fechaIngreso);
+  const fc = parseDateInputLocal(fechaCalculo);
+  if(!fi || !fc || isNaN(fi) || isNaN(fc) || fc < fi) return null;
+
+  let years = fc.getFullYear() - fi.getFullYear();
+  let months = fc.getMonth() - fi.getMonth();
+  let days = fc.getDate() - fi.getDate();
+
+  if(days < 0){
+    months -= 1;
+    const prev = new Date(fc.getFullYear(), fc.getMonth(), 0);
+    days += prev.getDate();
+  }
+  if(months < 0){
+    years -= 1;
+    months += 12;
+  }
+
+  const totalMonths = years*12 + months;
+
+  return { years, months, days, totalMonths };
+}
+
+function recalcularTiempoServicio(){
+  const fi = el('fecha_ingreso')?.value;
+  const fd = el('fecha_desde')?.value;
+  const fc = el('fecha_calculo')?.value;
+  const box = el('tiempo_servicio_texto');
+  if(!fi || !fc){
+    if(box) box.textContent = '---';
+    return;
+  }
+  if(el('fecha_desde') && !fd){
+    el('fecha_desde').value = fi;
+  }
+  const s = calcularServicio(fi, fc);
+  if(!s){
+    if(box) box.textContent = '---';
+    return;
+  }
+
+  state.totalMonthsServicio = s.totalMonths;
+
+  const txt = `${s.years} año(s), ${s.months} mes(es), ${s.days} día(s)`;
+  if(box) box.textContent = txt;
+
+  const anosVAC = Math.max(0, s.years);
+  state.anosVAC = anosVAC;
+
+  let anosPS = s.years;
+  if(s.months >= 6) anosPS += 1;
+  state.anosPS = Math.max(0, anosPS);
+
+  state.monthsAfterAnniversary = s.months;
+  state.vac.monthsFraction = s.months;
+  state.vac.currentYearNumber = Math.max(1, anosVAC + 1);
+
+  const daa = Math.min(Math.max(0, anosVAC - 1), 15);
+  if(el('DAA')) el('DAA').value = daa;
+
+  // Siempre recalcular DV y DBV automáticamente cuando cambian las fechas
+  applyVacSelectionToDVDBV();
+}
+
+function calcularNomina(){
+  recalcularTiempoServicio();
+
+  const S_NM = parseNumber('S_NM');
+  const DUA = parseNumber('DUA');
+  const SDI_FINAL = parseNumber('SDI_FINAL');
+  const DAA = parseNumber('DAA');
+  const DV0 = parseNumber('DV');
+  const DBV0 = parseNumber('DBV');
+
+  if(!DV0 || !DBV0){
+    applyVacSelectionToDVDBV();
+  }
+
+  const DV = parseNumber('DV');
+  const DBV = parseNumber('DBV');
+
+  const SDN = S_NM / 30;
+  const AUD = (SDN * DUA) / 360;
+  const ABVD = (SDN * (15 + DAA)) / 360;
+  const SDI = SDN + AUD + ABVD;
+
+  const sdiFinalInput = el('SDI_FINAL');
+  if(sdiFinalInput){
+    const raw = String(sdiFinalInput.value ?? '').trim();
+    const current = parseNumber('SDI_FINAL');
+    if(raw === '' || !current){
+      sdiFinalInput.value = SDI.toFixed(2);
+    }
+  }
+
+  state.SDN = SDN; state.AUD = AUD; state.ABVD = ABVD; state.SDI = SDI;
+
+  const SDI_USED = (SDI_FINAL && SDI_FINAL>0) ? SDI_FINAL : SDI;
+
+  const CPV = SDI_USED * DV;
+  const CBV = SDI_USED * DBV;
+  const UTIL = SDN * DUA;
+
+  const trimestres = Math.floor(state.totalMonthsServicio / 3);
+  const diasTrimestres = trimestres * 5;
+  const diasAdicionales = Math.min(Math.max(0, state.anosPS - 1), 30);
+
+  const totalGarantia = (diasTrimestres + diasAdicionales) * SDI_USED;
+  const totalRetroactivo = (30 * state.anosPS) * SDI_USED;
+  const PS = Math.max(totalGarantia, totalRetroactivo);
+
+  state.CPV = CPV;
+  state.CBV = CBV;
+  state.UTIL = UTIL;
+  state.PS = PS;
+
+  setText('r_SDN', SDN);
+  setText('r_AUD', AUD);
+  setText('r_ABVD', ABVD);
+  setText('r_SDI', SDI);
+
+  setText('r_CPV', CPV);
+  setText('r_CBV', CBV);
+  setText('r_UTIL', UTIL);
+
+  if(el('r_trimestres')) el('r_trimestres').textContent = String(trimestres);
+  if(el('r_dias_trimestres')) el('r_dias_trimestres').textContent = String(diasTrimestres);
+  if(el('r_dias_adicionales')) el('r_dias_adicionales').textContent = String(diasAdicionales);
+
+  setText('r_total_garantia', totalGarantia);
+  setText('r_total_retroactivo', totalRetroactivo);
+  setText('r_PS', PS);
+
+  calcularTotalesSeleccionados();
+}
+
+function calcularInteresesSolo(){
+  const modo = el('modo_calculo_intereses')?.value || 'AUTOMATICO';
+  const capIni = parseNumber('capital_intereses');
+  console.log('🔍 Modo:', modo, '| Capital inicial:', capIni);
+
+  if(modo === 'TRIMESTRAL'){
+    calcularInteresesTrimestral(capIni);
+  } else if(modo === 'MANUAL'){
+    calcularInteresesManual(capIni);
+  } else {
+    calcularInteresesAutomatico(capIni);
+  }
+}
+
+// Modo AUTOMÁTICO: Usa SDI actual y promedio de tasas
+function calcularInteresesAutomatico(capIni){
+  const SDI_FINAL = parseNumber('SDI_FINAL');
+  const SDI = SDI_FINAL > 0 ? SDI_FINAL : (state.SDI || 0);
+  const diasTrimestre = parseNumber('dias_prestacion_trimestral') || 15;
+  const prestacionTrimestral = SDI * diasTrimestre;
+  
+  console.log('💰 SDI:', SDI.toFixed(2), '| Prestación trimestral:', prestacionTrimestral.toFixed(2));
+
+  let totalIntereses = 0;
+  let capitalAcumulado = capIni || 0;
+  
+  for(let i=1;i<=12;i++){
+    const tasaAnual = parseNumber(`tasa_mes_${i}`);
+    if(!tasaAnual) continue;
+
+    // Fórmula Art. 143: Interés = (C × i × d) / 365
+    const diasMes = 30;
+    const interesMes = (capitalAcumulado * (tasaAnual/100) * diasMes) / 365;
+    totalIntereses += interesMes;
+    
+    // Cada 3 meses acumular prestaciones
+    if(i % 3 === 0){
+      capitalAcumulado += prestacionTrimestral;
+      console.log(`Trim ${i/3}: +${prestacionTrimestral.toFixed(2)} → Cap: ${capitalAcumulado.toFixed(2)}`);
+    }
+  }
+
+  console.log('✅ Total INTERESES:', totalIntereses.toFixed(2));
+  state.INTERESES = totalIntereses;
+  setText('r_INTERESES', totalIntereses);
+  calcularTotalesSeleccionados();
+}
+
+// Modo MANUAL: Usa salarios mensuales ingresados manualmente
+function calcularInteresesManual(capIni){
+  const DUA = parseNumber('DUA') || 30;
+  
+  let totalIntereses = 0;
+  let capitalAcumulado = capIni || 0;
+  
+  for(let i=1;i<=12;i++){
+    const salarioMensual = parseNumber(`salario_mes_${i}`);
+    const tasaAnual = parseNumber(`tasa_mes_${i}`);
+    if(!salarioMensual || !tasaAnual) continue;
+
+    // Convertir salario mensual a salario integral
+    const SDN = salarioMensual / 30;
+    const AUD = (SDN * DUA) / 360;
+    const ABVD = (SDN * 15) / 360; // Asumiendo 15 días bono
+    const SDI = SDN + AUD + ABVD;
+    
+    // Calcular interés del mes
+    const diasMes = 30;
+    const interesMes = (capitalAcumulado * (tasaAnual/100) * diasMes) / 365;
+    totalIntereses += interesMes;
+    
+    console.log(`Mes ${i}: Sal=${salarioMensual}, SDI=${SDI.toFixed(2)}, Int=${interesMes.toFixed(2)}`);
+    
+    // Acumular 5 días de SDI cada mes (o cada trimestre según configuración)
+    if(i % 3 === 0){
+      const diasTrimestre = parseNumber('dias_prestacion_trimestral') || 15;
+      capitalAcumulado += SDI * diasTrimestre;
+    }
+  }
+
+  console.log('✅ Total INTERESES:', totalIntereses.toFixed(2));
+  state.INTERESES = totalIntereses;
+  setText('r_INTERESES', totalIntereses);
+  calcularTotalesSeleccionados();
+}
+
+// Modo TRIMESTRAL: Cálculo más preciso por trimestres
+function calcularInteresesTrimestral(capIni){
+  const diasTrimestre = parseNumber('dias_prestacion_trimestral') || 15;
+  const DUA = parseNumber('DUA') || 30;
+  
+  // Obtener SDI (puede ser fijo o variable según salarios)
+  const SDI_FINAL = parseNumber('SDI_FINAL');
+  const SDI_BASE = SDI_FINAL > 0 ? SDI_FINAL : (state.SDI || 0);
+  
+  let totalIntereses = 0;
+  let capitalAcumulado = capIni || 0;
+  
+  console.log('📊 Cálculo TRIMESTRAL detallado:');
+  console.log('Capital inicial:', capitalAcumulado.toFixed(2));
+  
+  for(let trim=1; trim<=4; trim++){
+    const mesInicio = (trim-1)*3 + 1;
+    const mesFin = trim*3;
+    
+    // Obtener salarios y tasas del trimestre
+    let salarioPromedio = 0;
+    let tasaPromedio = 0;
+    let mesesValidos = 0;
+    
+    for(let m=mesInicio; m<=mesFin; m++){
+      const sal = parseNumber(`salario_mes_${m}`);
+      const tasa = parseNumber(`tasa_mes_${m}`);
+      if(tasa){
+        tasaPromedio += tasa;
+        mesesValidos++;
+        if(sal) salarioPromedio += sal;
+      }
+    }
+    
+    if(mesesValidos === 0) continue;
+    
+    tasaPromedio /= mesesValidos;
+    
+    // Determinar SDI del trimestre
+    let SDI_trim = SDI_BASE;
+    if(salarioPromedio > 0){
+      salarioPromedio /= mesesValidos;
+      const SDN = salarioPromedio / 30;
+      const AUD = (SDN * DUA) / 360;
+      const ABVD = (SDN * 15) / 360;
+      SDI_trim = SDN + AUD + ABVD;
+    }
+    
+    // IMPORTANTE: Acumular prestación AL INICIO del trimestre
+    const prestacionTrim = SDI_trim * diasTrimestre;
+    capitalAcumulado += prestacionTrim;
+    
+    // Calcular interés del trimestre sobre el capital YA acumulado
+    const diasTrim = (trim === 1) ? 90 : (trim === 2) ? 91 : 92;
+    const interesTrim = (capitalAcumulado * (tasaPromedio/100) * diasTrim) / 365;
+    totalIntereses += interesTrim;
+    
+    console.log(`Trim ${trim}: Capital base=${capitalAcumulado.toFixed(2)}, Tasa=${tasaPromedio.toFixed(2)}%, Días=${diasTrim}, Interés=${interesTrim.toFixed(2)}`);
+  }
+
+  console.log('✅ Total INTERESES:', totalIntereses.toFixed(2));
+  console.log('💰 Capital final acumulado:', capitalAcumulado.toFixed(2));
+  state.INTERESES = totalIntereses;
+  setText('r_INTERESES', totalIntereses);
+  calcularTotalesSeleccionados();
+}
+
+function refrescarTodosLosMontos(){
+  setText('r_SDN', state.SDN || 0);
+  setText('r_AUD', state.AUD || 0);
+  setText('r_ABVD', state.ABVD || 0);
+  setText('r_SDI', state.SDI || 0);
+
+  setText('r_CPV', state.CPV || 0);
+  setText('r_CBV', state.CBV || 0);
+  setText('r_UTIL', state.UTIL || 0);
+
+  setText('r_total_garantia', state.totalGarantia || 0);
+  setText('r_total_retroactivo', state.totalRetroactivo || 0);
+  setText('r_PS', state.PS || 0);
+
+  setText('r_INTERESES', state.INTERESES || 0);
+
+  setText('r_TOTAL_CAPITAL', 0);
+  setText('r_TOTAL_INTERESES', 0);
+  setText('r_TOTAL_GENERAL', 0);
+}
+
+function actualizarReciboSeleccionado(o){
+  const patronoNombre=normalize(el('patrono_nombre')?.value);
+  const patronoTipo=(el('patrono_tipo_doc')?.value||'').toUpperCase();
+  const patronoDoc=(el('patrono_doc')?.value||'').toUpperCase();
+
+  const trabNombre=normalize(el('trabajador_nombre')?.value);
+  const trabTipo=(el('trabajador_tipo_doc')?.value||'').toUpperCase();
+  const trabDoc=normalize(el('trabajador_doc')?.value);
+  const trabCargo=normalize(el('trabajador_cargo')?.value);
+
+  const fechaIng=el('fecha_ingreso')?.value || '---';
+  const tiempo=el('tiempo_servicio_texto')?.textContent || '---';
+
+  if(el('reciboEmpresa')) el('reciboEmpresa').textContent = patronoNombre
+    ? `PATRONO: ${patronoNombre} - ${patronoTipo}-${patronoDoc}`
+    : 'PATRONO: ---';
+
+  if(el('reciboTrabajadorNombre')) el('reciboTrabajadorNombre').textContent = trabNombre || '---';
+  if(el('reciboTrabajadorDoc')) el('reciboTrabajadorDoc').textContent = `${trabTipo}-${trabDoc || '---'}`;
+  if(el('reciboTrabajadorCargo')) el('reciboTrabajadorCargo').textContent = trabCargo || '---';
+  if(el('reciboFechaIngreso')) el('reciboFechaIngreso').textContent = fechaIng;
+  if(el('reciboTiempoServicio')) el('reciboTiempoServicio').textContent = tiempo;
+  if(el('reciboFechaRecibo')) el('reciboFechaRecibo').textContent = todayISO();
+
+  if(el('firmaTrabajadorNombre')) el('firmaTrabajadorNombre').textContent = trabNombre || '---';
+  if(el('firmaTrabajadorDoc')) el('firmaTrabajadorDoc').textContent = `${trabTipo}-${trabDoc || '---'}`;
+
+  const show = (rowId, txtId, showRow, val)=>{
+    const r = el(rowId);
+    if(r) r.style.display = showRow ? 'flex' : 'none';
+    if(el(txtId)) el(txtId).textContent = formatMoney(val);
+  };
+
+  show('rowReciboCPV','reciboCPV',o.showVac,o.capVac);
+  show('rowReciboCBV','reciboCBV',o.showBono,o.capBono);
+  show('rowReciboUTIL','reciboUTIL',o.showUtil,o.capUtil);
+  show('rowReciboPS','reciboPS',o.showPS,o.capPS);
+  show('rowReciboINTERESES','reciboINTERESES',o.showInt,o.interesesSel);
+
+  if(el('reciboTOTAL')) el('reciboTOTAL').textContent = formatMoney(o.totalGen);
+}
+
+function calcularTotalesSeleccionados(){
+  const chkVac = el('chkVac')?.checked ?? false;
+  const chkBono = el('chkBono')?.checked ?? false;
+  const chkUtil = el('chkUtil')?.checked ?? false;
+  const chkPS = el('chkPS')?.checked ?? false;
+  const chkInt = el('chkInt')?.checked ?? false;
+
+  const capVac = chkVac ? (state.CPV||0) : 0;
+  const capBono = chkBono ? (state.CBV||0) : 0;
+  const capUtil = chkUtil ? (state.UTIL||0) : 0;
+  const capPS = chkPS ? (state.PS||0) : 0;
+  const intSel = chkInt ? (state.INTERESES||0) : 0;
+
+  const capSel = capVac + capBono + capUtil + capPS;
+  const totalGen = capSel + intSel;
+
+  setText('r_TOTAL_CAPITAL', capSel);
+  setText('r_TOTAL_INTERESES', intSel);
+  setText('r_TOTAL_GENERAL', totalGen);
+
+  actualizarReciboSeleccionado({
+    capVac,capBono,capUtil,capPS,interesesSel:intSel,totalGen,
+    showVac:chkVac,showBono:chkBono,showUtil:chkUtil,showPS:chkPS,showInt:chkInt
+  });
+}
+
+function imprimirRecibo(){
+  window.print();
+}
+
+function prepararUppercase(){
+  document.querySelectorAll('.to-upper').forEach(x=>{
+    x.addEventListener('input', ()=>{
+      const start = x.selectionStart;
+      const end = x.selectionEnd;
+      x.value = x.value.toUpperCase();
+      x.setSelectionRange(start,end);
+    });
+  });
+}
+
+function prepararEnterTablaIntereses(){
+  for(let i=1;i<=12;i++){
+    const s=el('salario_mes_'+i);
+    const t=el('tasa_mes_'+i);
+    
+    // Si hay campo de salario, Enter pasa a tasa
+    s?.addEventListener('keydown', (e)=>{
+      if(e.key==='Enter'){
+        e.preventDefault();
+        t?.focus();
+      }
+    });
+    
+    // Desde tasa, Enter pasa al siguiente salario (o siguiente tasa si no hay salario)
+    t?.addEventListener('keydown', (e)=>{
+      if(e.key==='Enter'){
+        e.preventDefault();
+        const nextSalario = el('salario_mes_'+(i+1));
+        const nextTasa = el('tasa_mes_'+(i+1));
+        if(nextSalario){
+          nextSalario.focus();
+        } else if(nextTasa){
+          nextTasa.focus();
+        }
+      }
+    });
+  }
+}
+
+function limpiarFormulario(){
+  ['patrono_nombre','patrono_doc','trabajador_nombre','trabajador_doc','trabajador_cargo',
+   'fecha_ingreso','fecha_desde','fecha_calculo','S_NM','DUA','SDI_FINAL','DV','DBV','capital_intereses']
+  .forEach(id=>{ if(el(id)) el(id).value=''; });
+
+  if(el('DUA')) el('DUA').value=30;
+  if(el('S_NM')) el('S_NM').value=0;
+  if(el('SDI_FINAL')) el('SDI_FINAL').value=0;
+  if(el('capital_intereses')) el('capital_intereses').value=0;
+
+  if(el('tiempo_servicio_texto')) el('tiempo_servicio_texto').textContent='---';
+  if(el('DAA')) el('DAA').value=0;
+
+  state.SDN=0; state.AUD=0; state.ABVD=0; state.SDI=0;
+  state.CPV=0; state.CBV=0; state.UTIL=0; state.PS=0; state.INTERESES=0;
+
+  refrescarTodosLosMontos();
+  calcularTotalesSeleccionados();
+  
+  // Resetear el sistema de selección
+  if(el('cardDatosSeleccionados')) el('cardDatosSeleccionados').style.display = 'none';
+  if(el('cardFormularioCalculo')) el('cardFormularioCalculo').style.display = 'none';
+  if(el('cardNuevoTrabajador')) el('cardNuevoTrabajador').style.display = 'none';
+  if(el('cardSeleccionTrabajador')) el('cardSeleccionTrabajador').style.display = 'none';
+  if(el('cardSeleccionEmpresa')) el('cardSeleccionEmpresa').style.display = 'block';
+  
+  // Abrir lista de empresas
+  if(el('listaEmpresas')) {
+    el('listaEmpresas').style.display = 'block';
+    if(el('iconListaEmpresas')) el('iconListaEmpresas').className = 'fa-solid fa-chevron-up';
+  }
+  
+  // Forzar foco en el campo de búsqueda de empresas después de limpiar
+  setTimeout(()=>{
+    const campoBusqueda = el('empresaSearch');
+    if(campoBusqueda){
+      campoBusqueda.focus();
+      campoBusqueda.select(); // Seleccionar todo el texto si hay
+    }
+  }, 150);
+}
+
+function prepararEnterGeneral(){
+  const inputs = Array.from(document.querySelectorAll('input,select'))
+    .filter(x => x.id !== 'loginEmail' && x.id !== 'loginCode');
+  inputs.forEach((x,i)=>{
+    x.addEventListener('keydown', (e)=>{
+      if(e.key==='Enter'){
+        e.preventDefault();
+        inputs[i+1]?.focus();
+      }
+    });
+  });
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  el('btnLogin')?.addEventListener('click', manejarLogin);
+  el('loginEmail')?.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); manejarLogin(); }});
+  el('loginCode')?.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); manejarLogin(); }});
+
+  el('btnSalir')?.addEventListener('click', async ()=>{
+    if(window.appapi?.quit) await window.appapi.quit();
+  });
+
+  el('currencySelectApp')?.addEventListener('change', ()=>{
+    setCurrency(el('currencySelectApp').value);
+  });
+
+  cargarAniosBCV();
+  renderFilasIntereses();
+  prepararEdicionTasas();
+  actualizarPeriodoIntereses();
+  el('mes_inicio_interes')?.addEventListener('change', actualizarPeriodoIntereses);
+  el('interes_anio_inicio')?.addEventListener('change', actualizarPeriodoIntereses);
+  
+  // Cambiar modo de cálculo de intereses
+  el('modo_calculo_intereses')?.addEventListener('change', ()=>{
+    const modo = el('modo_calculo_intereses').value;
+    const hint = el('hint_intereses');
+    const seccionTabla = el('seccion_tabla_intereses');
+    const contenidoTabla = el('contenidoTablaIntereses');
+    const iconTabla = el('iconTablaIntereses');
+    
+    if(hint){
+      if(modo === 'AUTOMATICO'){
+        hint.innerHTML = '<strong>Modo Automático:</strong> Se usa el SDI actual y se acumulan prestaciones trimestrales automáticamente.';
+        // Ocultar sección de tabla
+        if(seccionTabla) seccionTabla.style.display = 'none';
+      } else if(modo === 'MANUAL'){
+        hint.innerHTML = '<strong>Modo Manual:</strong> Ingresa los salarios mensuales. Se convertirán a salario integral automáticamente.';
+        // Mostrar y expandir sección de tabla
+        if(seccionTabla) seccionTabla.style.display = 'block';
+        if(contenidoTabla) contenidoTabla.style.display = 'block';
+        if(iconTabla) iconTabla.className = 'fa-solid fa-chevron-up';
+      } else {
+        hint.innerHTML = '<strong>Modo Trimestral:</strong> Cálculo más preciso usando días exactos por trimestre (90-92 días).';
+        // Mostrar y expandir sección de tabla
+        if(seccionTabla) seccionTabla.style.display = 'block';
+        if(contenidoTabla) contenidoTabla.style.display = 'block';
+        if(iconTabla) iconTabla.className = 'fa-solid fa-chevron-up';
+      }
+    }
+    renderFilasIntereses();
+    actualizarPeriodoIntereses();
+    prepararEnterTablaIntereses(); // Reconfigurar navegación con Enter
+  });
+
+  prepararEnterTablaIntereses();
+
+  const wireRecalc = (id)=>{
+    const x = el(id);
+    if(!x) return;
+    ['change','blur'].forEach(evt=>{
+      x.addEventListener(evt, ()=>{
+        recalcularTiempoServicio();
+        // Actualizar también los cálculos visuales
+        const S_NM = parseNumber('S_NM');
+        if(S_NM > 0){
+          calcularNomina();
+        }
+      });
+    });
+  };
+  wireRecalc('fecha_ingreso');
+  wireRecalc('fecha_desde');
+  wireRecalc('fecha_calculo');
+
+  // También recalcular cuando cambie el salario
+  el('S_NM')?.addEventListener('change', ()=>{
+    const S_NM = parseNumber('S_NM');
+    if(S_NM > 0){
+      recalcularTiempoServicio();
+    }
+  });
+
+  el('vac_back_btn')?.addEventListener('click', ()=>{
+    closeVacModal();
+    el('fecha_calculo')?.focus();
+  });
+  el('vac_mode')?.addEventListener('change', ()=>{
+    updateVacModeUI();
+    if(el('vac_mode').value === 'SELECT_PERIODS'){
+      buildVacPeriodsUI();
+    }
+  });
+  el('vac_apply_btn')?.addEventListener('click', ()=>{
+    applyVacSelectionToDVDBV();
+    closeVacModal();
+    calcularNomina();
+  });
+
+  el('btnCalcular')?.addEventListener('click', calcularNomina);
+  el('btnCalcularIntereses')?.addEventListener('click', calcularInteresesSolo);
+  el('btnImprimir')?.addEventListener('click', imprimirRecibo);
+  el('btnLimpiar')?.addEventListener('click', limpiarFormulario);
+
+  ['chkVac','chkBono','chkUtil','chkPS','chkInt'].forEach(id=>{
+    el(id)?.addEventListener('change', calcularTotalesSeleccionados);
+  });
+
+  prepararUppercase();
+  prepararEnterGeneral();
+
+  setCurrency(el('currencySelect')?.value || 'USD');
+  
+  // Toggle para mostrar/ocultar sección de base de datos
+  el('toggleDbSection')?.addEventListener('click', ()=>{
+    const content = el('dbSectionContent');
+    const icon = el('iconDbToggle');
+    if(content && icon){
+      if(content.style.display === 'none'){
+        content.style.display = 'block';
+        icon.className = 'fa-solid fa-chevron-up';
+      } else {
+        content.style.display = 'none';
+        icon.className = 'fa-solid fa-chevron-down';
+      }
+    }
+  });
+  
+  // Toggle para mostrar/ocultar tabla de intereses
+  el('toggleTablaIntereses')?.addEventListener('click', ()=>{
+    const content = el('contenidoTablaIntereses');
+    const icon = el('iconTablaIntereses');
+    if(content && icon){
+      if(content.style.display === 'none'){
+        content.style.display = 'block';
+        icon.className = 'fa-solid fa-chevron-up';
+      } else {
+        content.style.display = 'none';
+        icon.className = 'fa-solid fa-chevron-down';
+      }
+    }
+  });
+  
+  // Función global para toggle de secciones
+  window.toggleSeccion = function(seccionId) {
+    const content = el(seccionId);
+    const iconId = 'icon' + seccionId.charAt(0).toUpperCase() + seccionId.slice(1);
+    const icon = el(iconId);
+    
+    if(content && icon){
+      if(content.style.display === 'none'){
+        content.style.display = 'block';
+        icon.className = 'fa-solid fa-chevron-up';
+      } else {
+        content.style.display = 'none';
+        icon.className = 'fa-solid fa-chevron-down';
+      }
+    }
+  };
+  
+  // Forzar recálculo inicial si hay fechas
+  setTimeout(()=>{
+    const fi = el('fecha_ingreso')?.value;
+    const fc = el('fecha_calculo')?.value;
+    if(fi && fc){
+      recalcularTiempoServicio();
+      const S_NM = parseNumber('S_NM');
+      if(S_NM > 0){
+        calcularNomina();
+      }
+    }
+  }, 100);
+
+  calcularTotalesSeleccionados();
+});
+
+// Registrar Service Worker para PWA
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then((registration) => {
+        console.log('Service Worker registrado:', registration.scope);
+      })
+      .catch((error) => {
+        console.log('Error al registrar Service Worker:', error);
+      });
+  });
+}
+
+// Detectar si se está ejecutando como PWA instalada
+window.addEventListener('DOMContentLoaded', () => {
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches 
+    || window.navigator.standalone 
+    || document.referrer.includes('android-app://');
+  
+  if (isStandalone) {
+    console.log('Ejecutando como PWA instalada');
+  }
+});
+</script>
+</body>
+</html>

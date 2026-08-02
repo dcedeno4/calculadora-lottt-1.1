@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generador de Iconos - LOTTT</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      background: #f0f0f0;
+    }
+    canvas {
+      border: 2px solid #333;
+      margin: 10px;
+      background: white;
+    }
+    button {
+      padding: 15px 30px;
+      font-size: 16px;
+      background: #4a7c59;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 10px;
+    }
+    button:hover {
+      background: #6b9b7c;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    h1 {
+      color: #4a7c59;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎨 Generador de Iconos - Calculadora LOTTT</h1>
+    <p>Haz clic en los botones para generar y descargar los iconos:</p>
+    
+    <canvas id="canvas192" width="192" height="192"></canvas>
+    <button onclick="generarIcono(192)">Generar icon-192.png</button>
+    
+    <br>
+    
+    <canvas id="canvas512" width="512" height="512"></canvas>
+    <button onclick="generarIcono(512)">Generar icon-512.png</button>
+  </div>
+
+  <script>
+    function generarIcono(size) {
+      const canvas = document.getElementById(`canvas${size}`);
+      const ctx = canvas.getContext('2d');
+      
+      // Fondo degradado verde
+      const gradient = ctx.createLinearGradient(0, 0, 0, size);
+      gradient.addColorStop(0, '#5a8c69');
+      gradient.addColorStop(1, '#4a7c59');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, size, size);
+      
+      // Borde redondeado
+      ctx.globalCompositeOperation = 'destination-in';
+      ctx.beginPath();
+      ctx.roundRect(0, 0, size, size, size * 0.15);
+      ctx.fill();
+      ctx.globalCompositeOperation = 'source-over';
+      
+      const centerX = size / 2;
+      const centerY = size / 2;
+      const scale = size / 512;
+      
+      // Calculadora - Cuerpo principal
+      ctx.fillStyle = '#ffffff';
+      ctx.shadowColor = 'rgba(0,0,0,0.3)';
+      ctx.shadowBlur = 15 * scale;
+      ctx.shadowOffsetY = 5 * scale;
+      
+      const calcWidth = 200 * scale;
+      const calcHeight = 280 * scale;
+      const calcX = centerX - calcWidth / 2;
+      const calcY = centerY - calcHeight / 2 - 20 * scale;
+      
+      ctx.beginPath();
+      ctx.roundRect(calcX, calcY, calcWidth, calcHeight, 15 * scale);
+      ctx.fill();
+      
+      ctx.shadowBlur = 0;
+      ctx.shadowOffsetY = 0;
+      
+      // Pantalla de la calculadora
+      ctx.fillStyle = '#2c3e50';
+      ctx.beginPath();
+      ctx.roundRect(calcX + 15 * scale, calcY + 15 * scale, calcWidth - 30 * scale, 60 * scale, 8 * scale);
+      ctx.fill();
+      
+      // Texto en pantalla (símbolo de dinero)
+      ctx.fillStyle = '#4a7c59';
+      ctx.font = `bold ${35 * scale}px Arial`;
+      ctx.textAlign = 'right';
+      ctx.fillText('$', calcX + calcWidth - 25 * scale, calcY + 55 * scale);
+      
+      // Botones de la calculadora (4x4)
+      ctx.fillStyle = '#4a7c59';
+      const buttonSize = 35 * scale;
+      const buttonGap = 10 * scale;
+      const startX = calcX + 20 * scale;
+      const startY = calcY + 90 * scale;
+      
+      for (let row = 0; row < 4; row++) {
+        for (let col = 0; col < 4; col++) {
+          ctx.beginPath();
+          ctx.roundRect(
+            startX + col * (buttonSize + buttonGap),
+            startY + row * (buttonSize + buttonGap),
+            buttonSize,
+            buttonSize,
+            5 * scale
+          );
+          ctx.fill();
+        }
+      }
+      
+      // Símbolo de balanza pequeño (arriba)
+      ctx.strokeStyle = '#ffffff';
+      ctx.fillStyle = '#ffffff';
+      ctx.lineWidth = 3 * scale;
+      
+      const balanceY = calcY - 50 * scale;
+      const balanceScale = 0.3;
+      
+      // Barra horizontal de balanza
+      ctx.beginPath();
+      ctx.moveTo(centerX - 40 * scale, balanceY);
+      ctx.lineTo(centerX + 40 * scale, balanceY);
+      ctx.stroke();
+      
+      // Platos
+      ctx.beginPath();
+      ctx.arc(centerX - 30 * scale, balanceY + 15 * scale, 12 * scale, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(centerX + 30 * scale, balanceY + 15 * scale, 12 * scale, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // Texto LOTTT debajo
+      ctx.font = `bold ${45 * scale}px Arial`;
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#ffffff';
+      ctx.shadowColor = 'rgba(0,0,0,0.5)';
+      ctx.shadowBlur = 10 * scale;
+      ctx.fillText('LOTTT', centerX, calcY + calcHeight + 50 * scale);
+      
+      // Descargar
+      const link = document.createElement('a');
+      link.download = `icon-${size}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      
+      alert(`✅ icon-${size}.png generado! Guárdalo en la carpeta app/`);
+    }
+    
+    // Generar preview al cargar
+    window.onload = () => {
+      generarIcono(192);
+      generarIcono(512);
+    };
+  </script>
+</body>
+</html>
