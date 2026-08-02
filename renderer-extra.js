@@ -441,27 +441,73 @@ async function cargarListaEmpresas() {
 }
 
 function mostrarFormularioNuevaEmpresa() {
-  const nombre = prompt("Nombre o Razón Social de la empresa:");
-  if (!nombre || nombre.trim() === "") return;
+  // Crear formulario modal simple
+  const formHtml = `
+    <div style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;display:flex;align-items:center;justify-content:center" id="modalNuevaEmpresa">
+      <div style="background:white;padding:30px;border-radius:10px;max-width:500px;width:90%">
+        <h3 style="margin-top:0">Nueva Empresa / Patrono</h3>
+        <div style="margin-bottom:15px">
+          <label style="display:block;margin-bottom:5px;font-weight:bold">Nombre o Razón Social:</label>
+          <input type="text" id="nuevaEmpresaNombre" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px" />
+        </div>
+        <div style="margin-bottom:15px">
+          <label style="display:block;margin-bottom:5px;font-weight:bold">Tipo de documento:</label>
+          <select id="nuevaEmpresaTipoDoc" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px">
+            <option value="J">J - Jurídico</option>
+            <option value="G">G - Gubernamental</option>
+            <option value="V">V - Venezolano</option>
+            <option value="E">E - Extranjero</option>
+          </select>
+        </div>
+        <div style="margin-bottom:20px">
+          <label style="display:block;margin-bottom:5px;font-weight:bold">Número de documento (sin guiones):</label>
+          <input type="text" id="nuevaEmpresaDoc" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px" />
+        </div>
+        <div style="display:flex;gap:10px;justify-content:flex-end">
+          <button onclick="cerrarModalNuevaEmpresa()" style="padding:10px 20px;background:#ccc;border:none;border-radius:4px;cursor:pointer">Cancelar</button>
+          <button onclick="guardarNuevaEmpresa()" style="padding:10px 20px;background:#5a8c69;color:white;border:none;border-radius:4px;cursor:pointer">Guardar</button>
+        </div>
+      </div>
+    </div>
+  `;
   
-  const tipoDoc = prompt("Tipo de documento (J/G/V/E):", "J");
-  if (!tipoDoc || tipoDoc.trim() === "") return;
+  document.body.insertAdjacentHTML('beforeend', formHtml);
+  document.getElementById('nuevaEmpresaNombre').focus();
+}
+
+window.cerrarModalNuevaEmpresa = function() {
+  const modal = document.getElementById('modalNuevaEmpresa');
+  if (modal) modal.remove();
+}
+
+window.guardarNuevaEmpresa = async function() {
+  const nombre = document.getElementById('nuevaEmpresaNombre').value.trim();
+  const tipoDoc = document.getElementById('nuevaEmpresaTipoDoc').value;
+  const doc = document.getElementById('nuevaEmpresaDoc').value.trim();
   
-  const doc = prompt("Número de documento (sin guiones):");
-  if (!doc || doc.trim() === "") return;
+  if (!nombre) {
+    alert('Por favor ingresa el nombre de la empresa');
+    return;
+  }
   
-  // Guardar empresa en la base de datos
-  window.dbapi.patronoSave({
-    tipo_doc: tipoDoc.toUpperCase(),
-    doc: doc.trim(),
-    nombre: nombre.trim()
-  }).then(async (result) => {
+  if (!doc) {
+    alert('Por favor ingresa el número de documento');
+    return;
+  }
+  
+  try {
+    await window.dbapi.patronoUpsert({
+      tipo_doc: tipoDoc.toUpperCase(),
+      doc: doc,
+      nombre: nombre
+    });
+    
     alert(`✅ Empresa "${nombre}" agregada exitosamente!`);
-    // Recargar lista de empresas
+    cerrarModalNuevaEmpresa();
     await cargarListaEmpresas();
-  }).catch(err => {
+  } catch (err) {
     alert(`❌ Error al guardar empresa: ${err.message}`);
-  });
+  }
 }
 
 function mostrarFormularioNuevoTrabajador() {

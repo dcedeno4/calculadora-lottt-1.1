@@ -44,7 +44,7 @@ function initDB() {
 // API compatible con Electron
 window.dbapi = {
   // Guardar patrono
-  patronoSave: async (data) => {
+  patronoUpsert: async (data) => {
     if (!db) await initDB();
     
     return new Promise((resolve, reject) => {
@@ -86,7 +86,7 @@ window.dbapi = {
   },
   
   // Guardar trabajador
-  trabajadorSave: async (data) => {
+  trabajadorUpsert: async (data) => {
     if (!db) await initDB();
     
     return new Promise((resolve, reject) => {
@@ -133,7 +133,7 @@ window.dbapi = {
   },
   
   // Guardar cálculo
-  calculoSave: async (data) => {
+  calculoGuardar: async (data) => {
     if (!db) await initDB();
     
     return new Promise((resolve, reject) => {
@@ -151,7 +151,7 @@ window.dbapi = {
   },
   
   // Listar cálculos de un trabajador
-  calculoList: async (trabajadorId) => {
+  calculoListarPorTrabajador: async (trabajadorId) => {
     if (!db) await initDB();
     
     return new Promise((resolve, reject) => {
