@@ -1552,7 +1552,15 @@ document.addEventListener('DOMContentLoaded', ()=>{
   el('loginCode')?.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); manejarLogin(); }});
 
   el('btnSalir')?.addEventListener('click', async ()=>{
-    if(window.appapi?.quit) await window.appapi.quit();
+    if(window.appapi?.quit) {
+      // Versión Electron
+      await window.appapi.quit();
+    } else {
+      // Versión Web - Recargar página para volver al login
+      if(confirm('¿Deseas cerrar sesión?')) {
+        location.reload();
+      }
+    }
   });
 
   el('currencySelectApp')?.addEventListener('change', ()=>{
